@@ -6,9 +6,11 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Home from './pages/Home';
 import SubmittedForm from './pages/SubmittedForm';
-import PostPage from './pages/PostPage';
+import PostPage from './pages/ProductView';
+import AllProducts from './pages/AllProducts';
 
 function App() {
+
   return (
     <Router>
 
@@ -18,7 +20,10 @@ function App() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/posts">Posts</Link>
+            <Link to="/products">Products</Link>
+          </li>
+          <li>
+            <Link to="/all-products">Show All Products</Link>
           </li>
           <li>
             <Link to="/about">About</Link>
@@ -33,8 +38,11 @@ function App() {
         <Route exact path="/">
           <Home />
         </Route>
-        <Route exact path="/posts">
+        <Route exact path="/products">
           <PostPage />
+        </Route>
+        <Route exact path="/all-products">
+          <AllProducts />
         </Route>
         <Route exact path="/about">
           <About />
