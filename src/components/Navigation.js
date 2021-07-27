@@ -10,17 +10,18 @@ export default function Navigation() {
                 <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
                 <Navbar.Collapse id='responsive-navbar-nav'>
                 <Nav className="me-auto">
-                    <Nav.Link href='/'>Home</Nav.Link>
-                    <Nav.Link href='/products'>Products</Nav.Link>
-                    <Nav.Link href='/all-products'>Show All Products</Nav.Link>
-                    <Nav.Link href='/about'>About</Nav.Link>
-                    <Nav.Link href='/contact'>Contact Us</Nav.Link>
+                    <Nav.Link href='../'>Home</Nav.Link>
+                    <Nav.Link href='../products'>Products</Nav.Link>
+                    <Nav.Link href='../all-products'>Show All Products</Nav.Link>
+                    <Nav.Link href='../about'>About</Nav.Link>
+                    <Nav.Link href='../contact'>Contact Us</Nav.Link>
                 </Nav>
                 <Nav>
                     <Navbar.Text>
-                        Hello <a href="#login">Stranger</a>
+                        Hello <a href="/">Stranger</a>
                     </Navbar.Text>
-                    <Button variant="light" href="/">Login</Button>
+                    <Nav.Link href='../profile'>Profile</Nav.Link>
+                    <Button variant="light" href="/login">Login</Button>
                 </Nav>
                 </Navbar.Collapse>
             </Container>

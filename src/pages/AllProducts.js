@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import axios from 'axios';
 import config from '../config';
 
@@ -18,21 +18,24 @@ export default function AllProducts() {
 
     return (<React.Fragment>
         <h1>Show All: </h1>
-        { products.map(p => <div key={p.id}>
+        <Container>
+            <Row>
+            { products.map(p => <Col key={p.id}>
+                <Card style={{ width: '18rem' }}>
+                    <Card.Img variant="top" src={p.image_url} />
+                    <Card.Body>
+                        <Card.Title>{p.name}</Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted">${p.unit_base_price/100}</Card.Subtitle>
+                        <Card.Text>
+                            {p.description}
+                            <p>Available: {p.quantity_in_stock}</p>
+                        </Card.Text>
+                        <Button variant="primary">View Product</Button>
+                    </Card.Body>
+                </Card>
+            </Col>) }
+            </Row>
+        </Container>
 
-            <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src={p.image_url} />
-                <Card.Body>
-                    <Card.Title>{p.name}</Card.Title>
-                    <Card.Text>
-                        {p.description}
-                        {p.unit_base_price}
-                        {p.quantity_in_stock}
-                    </Card.Text>
-                    <Button variant="primary">Add To Cart</Button>
-                </Card.Body>
-            </Card>
-
-        </div>) }
     </React.Fragment>)
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Card, Button } from "react-bootstrap";
 import axios from 'axios';
 
 import config from '../config';
@@ -10,16 +11,18 @@ export default function ProductView(props) {
 
     // load in the current active post
     useEffect(() => {
-        const fetchPost = async (productId) => {
+        const fetchProduct = async (productId) => {
             if (productId > 0) {
-                console.log("axios.get Product", productId)
+                console.log("before axios.get Product", productId)
                 const base_URL = config.API_URL + "/products/";
                 const response = await axios.get(base_URL + productId);
-                console.log(">>>", response.data);
+                console.log("after axios >>>", productId, response.data);
                 setActiveProduct(response.data);
+            } else {
+                console.log("Skip axios.get")
             }
         }
-        fetchPost(activeProductId)
+        fetchProduct(activeProductId)
     }, [activeProductId])
 
     return (
@@ -32,16 +35,20 @@ export default function ProductView(props) {
                     setActiveProductId(e.target.value)
                 }}
             />
-            <div className="card">
-                <div className="card-title">
-                    {activeProduct.name + "-" + activeProduct.brand['name']}
-                    <p className="card-subtitle">{activeProduct.category['name']}</p>
-                </div>
-                <p>{activeProduct.description}</p>
-                {/* <p>{activeProduct.tags}</p> */}
-                <img src={activeProduct.image_url} className="img-fluid img-thumbnail" alt={activeProduct.name}/>
-            </div>
-            <hr/>
+            {activeProduct ?
+            <Card style={{ width: '18rem' }}>
+                <Card.Img variant="top" src={activeProduct.image_url} />
+                <Card.Body>
+                    <Card.Title>{activeProduct.name}</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">{activeProduct.brand['name']}</Card.Subtitle>
+                    <Card.Text>
+                        {activeProduct.description}
+                    </Card.Text>
+                    <Button variant="success">Add To Cart</Button>
+                </Card.Body>
+            </Card> 
+            : null}
+
         </React.Fragment>
     )
 }
