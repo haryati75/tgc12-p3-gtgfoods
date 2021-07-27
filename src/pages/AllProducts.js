@@ -5,6 +5,7 @@ import config from '../config';
 
 
 export default function AllProducts() {
+
     const [products, setProducts] = useState([]);
 
     useEffect(()=> {
@@ -17,8 +18,8 @@ export default function AllProducts() {
     }, []);
 
     return (<React.Fragment>
-        <h1>Show All: </h1>
         <Container>
+            <h1>Welcome back to our shop, {localStorage.getItem('userName')}</h1>
             <Row>
             { products.map(p => <Col key={p.id}>
                 <Card style={{ width: '18rem' }}>

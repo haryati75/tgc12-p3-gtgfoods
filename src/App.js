@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
-
-import config from './config'
 
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -15,65 +12,24 @@ import Navigation from './components/Navigation';
 import Login from './pages/Login';
 import UserProfile from './pages/UserProfile';
 
-import UserContext from './UserContext';
+import UserProvider from './UserProvider';
 
-function App() {
-
-  const [user, setUser] = useState([]);
-
-  useEffect(() => {
-    setInterval(async () => {
-      let refreshToken = localStorage.getItem('refreshToken');
-      if (refreshToken) {
-        const response = await axios.post(config.API_URL + '/users/refresh', {
-          refreshToken
-        })
-        localStorage.setItem('accessToken', response.data.accessToken);
-      }
-    }, config.REFRESH_INTERVAL)
-  }, []);
-
-  const userContext = {
-    getUser: () => { return user },
-    setUser: (user) => { setUser(user) }
-  }
-
+export default function App() {
   return (
     <Router>
-
-      <Navigation />
-
-      <UserContext.Provider value={userContext}>
+      <UserProvider>
+        <Navigation />
         <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/products">
-            <PostPage />
-          </Route>
-          <Route exact path="/all-products">
-            <AllProducts />
-          </Route>
-          <Route exact path="/about">
-            <About />
-          </Route>
-          <Route exact path="/contact">
-            <Contact />
-          </Route>
-          <Route exact path="/form-submitted">
-            <SubmittedForm />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/profile">
-            <UserProfile />
-          </Route>
+          <Route exact path="/" component={Home}/>
+          <Route exact path="/products" component={PostPage}/>
+          <Route exact path="/all-products" component={AllProducts}/>
+          <Route exact path="/about" component={About}/>
+          <Route exact path="/contact" component={Contact}/>
+          <Route exact path="/form-submitted" component={SubmittedForm}/>
+          <Route exact path="/login" component={Login}/>
+          <Route exact path="/profile" component={UserProfile}/>
         </Switch>
-      </UserContext.Provider>
-
+      </UserProvider>
     </Router>
   );
 }
-
-export default App;

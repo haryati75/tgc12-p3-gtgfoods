@@ -2,6 +2,7 @@ import React from 'react';
 import { Nav, Navbar, Container, Button } from 'react-bootstrap';
 
 export default function Navigation() {
+
     return (<React.Fragment>
 
         <Navbar collapseOnSelect fixed='sticky' expand='sm' bg='success' variant='dark'>
@@ -18,10 +19,11 @@ export default function Navigation() {
                 </Nav>
                 <Nav>
                     <Navbar.Text>
-                        Hello <a href="/">Stranger</a>
+                        Hello 
                     </Navbar.Text>
-                    <Nav.Link href='../profile'>Profile</Nav.Link>
+                    <Nav.Link href='../profile' active>{localStorage.getItem('userName')}</Nav.Link>
                     <Button variant="light" href="/login">Login</Button>
+                    <Button variant="dark" href="/logout">Logout</Button>
                 </Nav>
                 </Navbar.Collapse>
             </Container>
