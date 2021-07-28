@@ -10,6 +10,7 @@ export default function UserProvider(props) {
 
     useEffect(() => {
         setInterval(async () => {
+            console.log("refreshing token...")
             let refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
                 const response = await axios.post(config.API_URL + '/users/refresh', {
@@ -17,7 +18,11 @@ export default function UserProvider(props) {
                 })
                 localStorage.setItem('accessToken', response.data.accessToken);
             } else {
-                console.log("Session expired")
+                localStorage.clear();
+                console.log("Session expired");
+                history.push('/', {
+                    welcomeUser : 'N'
+                })
             }
         }, config.REFRESH_INTERVAL)
     }, []);

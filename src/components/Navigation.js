@@ -25,7 +25,16 @@ export default function Navigation() {
 
         <Navbar collapseOnSelect fixed='sticky' expand='sm' bg='success' variant='dark'>
             <Container>
-                <Navbar.Brand href="/">GreatToGo Foods</Navbar.Brand>
+                <Navbar.Brand href="/">
+                <img
+                    alt="Healthy Food Delivery"
+                    src="%PUBLIC_URL%/../../great-to-go-logo.png"
+                    width="30"
+                    height="30"
+                    className="d-inline-block align-top"
+                    />{` `}
+                    GreatToGo Foods
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls='responsive-navbar-nav'/>
                 <Navbar.Collapse id='responsive-navbar-nav'>
                 <Nav className="me-auto">

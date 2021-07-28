@@ -6,7 +6,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 // import Home from './pages/Home';
 import SubmittedForm from './pages/SubmittedForm';
-// import ProductView from './pages/ProductView';
+import ProductView from './pages/ProductView';
 import AllProducts from './pages/AllProducts';
 import Navigation from './components/Navigation';
 import LoginPage from './pages/LoginPage';
@@ -21,7 +21,7 @@ export default function App() {
         <Navigation />
         <Switch>
           <Route exact path="/" component={AllProducts}/>
-          {/* <Route exact path="/products" component={ProductView}/> */}
+          <Route exact path="/products/:product_id" component={ProductView}/>
           {/* <Route exact path="/all-products" component={AllProducts}/> */}
           <Route exact path="/about" component={About}/>
           <Route exact path="/contact" component={Contact}/>

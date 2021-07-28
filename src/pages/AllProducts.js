@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
-import { useLocation, useHistory } from 'react-router-dom';
+import Badge from 'react-bootstrap/Badge'
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
 
@@ -11,8 +12,6 @@ export default function AllProducts() {
     const location = useLocation();
     const welcomeUser = location.state ? location.state.welcomeUser : null;
 
-    const history = useHistory()
-
     const [products, setProducts] = useState([]);
 
     useEffect(()=> {
@@ -20,15 +19,10 @@ export default function AllProducts() {
             let baseURL = config.API_URL + "/products";
             let response = await axios.get(baseURL);
             setProducts(response.data)
+            console.log("AllProducts", response.data)
         }
         fetch();
     }, []);
-
-    function viewProduct(productId) {
-        history.push('/products', {
-            productId
-        })
-    }
 
     return (<React.Fragment>
         <Container>
@@ -42,12 +36,14 @@ export default function AllProducts() {
                     <Card style={{ width: '18rem' }}>
                         <Card.Img variant="top" src={p.image_url} />
                         <Card.Body>
-                            <Card.Title>{p.name}</Card.Title>
+                            <Card.Title>{p.category.name}: {p.name}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">${p.unit_base_price/100}</Card.Subtitle>
                             <Card.Text>{p.description}</Card.Text>
-                            <Card.Footer>Available: {p.quantity_in_stock}</Card.Footer>                        
-                            <Button variant="primary" onClick={() => { viewProduct(p.id) }} >View Product</Button>
+                            <Card.Footer>Available: {p.quantity_in_stock}</Card.Footer>        
+                                       
+                            <Button variant="primary" href={"/products/"+p.id} >View Product</Button>
                         </Card.Body>
+                        { p.tags.map( t => <span key={t.id}>{t.name}</span> ) }     
                     </Card>
                 </Col>) }
             </Row>
