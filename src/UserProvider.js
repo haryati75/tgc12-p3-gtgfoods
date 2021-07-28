@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import UserContext from "./UserContext";
 import config from './config';
 
 export default function UserProvider(props) {
+    const history = useHistory()
     const [user, setUser] = useState([]);
 
     useEffect(() => {
@@ -22,16 +24,22 @@ export default function UserProvider(props) {
         getUser: () => { return user },
         setUser: (user) => { setUser(user) },
         logout: async () => {
-
-            let response = await axios.post(config.API_URL + "/users/logout", {
-                refreshToken : user.refreshToken
-            });
-            // clear all user data
-            localStorage.setItem('accessToken', null);
-            localStorage.setItem('refreshToken', null);
-            localStorage.setItem('userName', null); 
-            userContext.setUser(null)
-            console.log(response.data.message)
+            console.log('logging out...')
+            localStorage.clear();
+            try {
+                let response = await axios.post(config.API_URL + "/users/logout", {
+                    refreshToken : user.refreshToken
+                });
+                // clear all user data
+                userContext.setUser(null)
+                console.log("logged out successful", response)
+            } catch(e) {
+                userContext.setUser(null)
+                console.log("logout error", e)
+            }
+            history.push('/all-products', {
+                welcomeUser : 'N'
+            })
         }
     }
 

@@ -6,7 +6,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Home from './pages/Home';
 import SubmittedForm from './pages/SubmittedForm';
-import PostPage from './pages/ProductView';
+import ProductView from './pages/ProductView';
 import AllProducts from './pages/AllProducts';
 import Navigation from './components/Navigation';
 import Login from './pages/Login';
@@ -20,8 +20,8 @@ export default function App() {
       <UserProvider>
         <Navigation />
         <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route exact path="/products" component={PostPage}/>
+          <Route exact path="/" component={AllProducts}/>
+          {/* <Route exact path="/products" component={ProductView}/> */}
           <Route exact path="/all-products" component={AllProducts}/>
           <Route exact path="/about" component={About}/>
           <Route exact path="/contact" component={Contact}/>

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from "react-router-dom";
-import { Form, Button } from 'react-bootstrap';
+import { Container, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import config from '../config';
 
@@ -45,17 +45,18 @@ export default function Login() {
 
             console.log("login successful", response.data)
         } catch (e) {
+            localStorage.clear();
             alert("Login Failed!", e)
         }
 
         history.push('/all-products', {
-            formState
-        })
+            welcomeUser: 'Y'
+        }) 
 
     }
 
     return <div>
-
+        <Container>
         <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
@@ -78,20 +79,7 @@ export default function Login() {
                 Submit
             </Button>
         </Form>
-
-                {/* <>
-        <FloatingLabel
-            controlId="floatingInput"
-            label="Email address"
-            className="mb-3"
-        >
-            <Form.Control type="email" placeholder="name@example.com" />
-        </FloatingLabel>
-        <FloatingLabel controlId="floatingPassword" label="Password">
-            <Form.Control type="password" placeholder="Password" />
-        </FloatingLabel>
-        </> */}
-
+        </Container>
     </div>
 
 }
