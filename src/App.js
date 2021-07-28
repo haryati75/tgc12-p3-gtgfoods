@@ -4,12 +4,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import About from './pages/About';
 import Contact from './pages/Contact';
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import SubmittedForm from './pages/SubmittedForm';
-import ProductView from './pages/ProductView';
+// import ProductView from './pages/ProductView';
 import AllProducts from './pages/AllProducts';
 import Navigation from './components/Navigation';
-import Login from './pages/Login';
+import LoginPage from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
 
 import UserProvider from './UserProvider';
@@ -22,11 +22,11 @@ export default function App() {
         <Switch>
           <Route exact path="/" component={AllProducts}/>
           {/* <Route exact path="/products" component={ProductView}/> */}
-          <Route exact path="/all-products" component={AllProducts}/>
+          {/* <Route exact path="/all-products" component={AllProducts}/> */}
           <Route exact path="/about" component={About}/>
           <Route exact path="/contact" component={Contact}/>
           <Route exact path="/form-submitted" component={SubmittedForm}/>
-          <Route exact path="/login" component={Login}/>
+          <Route exact path="/login" component={LoginPage}/>
           <Route exact path="/profile" component={UserProfile}/>
         </Switch>
       </UserProvider>

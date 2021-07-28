@@ -12,10 +12,12 @@ export default function UserProvider(props) {
         setInterval(async () => {
             let refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
-            const response = await axios.post(config.API_URL + '/users/refresh', {
-                refreshToken
-            })
-            localStorage.setItem('accessToken', response.data.accessToken);
+                const response = await axios.post(config.API_URL + '/users/refresh', {
+                    refreshToken
+                })
+                localStorage.setItem('accessToken', response.data.accessToken);
+            } else {
+                console.log("Session expired")
             }
         }, config.REFRESH_INTERVAL)
     }, []);
@@ -23,23 +25,49 @@ export default function UserProvider(props) {
     const userContext = {
         getUser: () => { return user },
         setUser: (user) => { setUser(user) },
+
         logout: async () => {
-            console.log('logging out...')
-            localStorage.clear();
+            let refreshToken = localStorage.getItem('refreshToken');
             try {
-                let response = await axios.post(config.API_URL + "/users/logout", {
-                    refreshToken : user.refreshToken
+                await axios.post(config.API_URL + "/users/logout", {
+                    refreshToken
                 });
-                // clear all user data
-                userContext.setUser(null)
-                console.log("logged out successful", response)
             } catch(e) {
-                userContext.setUser(null)
                 console.log("logout error", e)
             }
-            history.push('/all-products', {
+            // clear all user data
+            localStorage.clear();
+            userContext.setUser(null)
+            history.push('/', {
                 welcomeUser : 'N'
             })
+        },
+
+        login: async (email, password) => {
+            try {
+                let response = await axios.post(config.API_URL + "/users/login", {
+                    email,
+                    password
+                });
+                // save token and user details
+                console.log("login successful:", response.data)
+                localStorage.setItem('accessToken', response.data.accessToken);
+                localStorage.setItem('refreshToken', response.data.refreshToken);
+                localStorage.setItem('userName', response.data.userName); // to be used by NavBar
+                userContext.setUser({
+                    'email': email,
+                    'userName': response.data.userName,
+                    'accessToken': response.data.accessToken,
+                    'refreshToken': response.data.refreshToken
+                })
+                history.push('/', {
+                    welcomeUser : 'Y'
+                })
+            } catch (e) {
+                localStorage.clear();
+                alert("Login Failed!", e)
+                history.push('/')
+            }
         }
     }
 

@@ -7,17 +7,16 @@ export default function Navigation() {
     const userContext = useContext(UserContext);
 
     const loginJSX = () => {
-        // console.log("Navigation loginJSX rendering..")
         if (localStorage.getItem('userName')) {
             return (<React.Fragment>
-                <Navbar.Text>Hello </Navbar.Text>
-                <Nav.Link href='../profile' active>{localStorage.getItem('userName')}</Nav.Link>
+                <Nav.Link href='../profile' active>Hello {localStorage.getItem('userName')}</Nav.Link>
                 <Button className="mx-3" variant="dark" onClick={userContext.logout}>Logout</Button>
             </React.Fragment>)
         } else {
             return (<React.Fragment>
                 <Navbar.Text>Hello Stranger</Navbar.Text>
-                <Button className="mx-3" variant="light" href="/login">Login</Button> 
+                <Button className="ms-3" variant="primary" href="/login">Login</Button> 
+                <Button className="ms-1"variant="light" href="/register">Register</Button> 
             </React.Fragment>)
         }
     }
@@ -32,7 +31,7 @@ export default function Navigation() {
                 <Nav className="me-auto">
                     <Nav.Link href='/'>Home</Nav.Link>
                     {/* <Nav.Link href='../products'>Products</Nav.Link> */}
-                    <Nav.Link href='../all-products'>Show All Products</Nav.Link>
+                    {/* <Nav.Link href='../all-products'>Show All Products</Nav.Link> */}
                     <Nav.Link href='../about'>About</Nav.Link>
                     <Nav.Link href='../contact'>Contact Us</Nav.Link>
                 </Nav>
