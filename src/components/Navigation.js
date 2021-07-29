@@ -10,6 +10,7 @@ export default function Navigation() {
         if (localStorage.getItem('userName')) {
             return (<React.Fragment>
                 <Nav.Link href='../profile' active>Hello {localStorage.getItem('userName')}</Nav.Link>
+                <Button className="ms-1"variant="light" href="/cart">Shopping Cart ({localStorage.getItem('cartTotalQuantity')})</Button> 
                 <Button className="mx-3" variant="dark" onClick={userContext.logout}>Logout</Button>
             </React.Fragment>)
         } else {

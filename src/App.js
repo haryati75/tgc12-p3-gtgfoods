@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
 
 import UserProvider from './UserProvider';
+import ShoppingCart from './pages/ShoppingCart';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
           <Route exact path="/form-submitted" component={SubmittedForm}/>
           <Route exact path="/login" component={LoginPage}/>
           <Route exact path="/profile" component={UserProfile}/>
+          <Route exact path="/cart" component={ShoppingCart}/>
         </Switch>
       </UserProvider>
     </Router>

@@ -20,9 +20,6 @@ export default function UserProvider(props) {
             } else {
                 localStorage.clear();
                 console.log("Session expired");
-                history.push('/', {
-                    welcomeUser : 'N'
-                })
             }
         }, config.REFRESH_INTERVAL)
     }, []);

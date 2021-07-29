@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
-import Badge from 'react-bootstrap/Badge'
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
@@ -41,7 +40,8 @@ export default function AllProducts() {
                             <Card.Text>{p.description}</Card.Text>
                             <Card.Footer>Available: {p.quantity_in_stock}</Card.Footer>        
                                        
-                            <Button variant="primary" href={"/products/"+p.id} >View Product</Button>
+                            <Button variant="secondary" href={"/products/"+p.id} >View Product</Button>{' '}
+                            <Button variant="success" href={"/cart/"+p.id} >Add To Cart</Button>
                         </Card.Body>
                         { p.tags.map( t => <span key={t.id}>{t.name}</span> ) }     
                     </Card>
