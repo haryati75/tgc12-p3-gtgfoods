@@ -36,7 +36,7 @@ export default function AllProducts() {
                     'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
                 }
             });
-            setAlertJSX(<Alert variant="success">{productName} added to Shopping Cart successfully.</Alert>)            
+            setAlertJSX(<Alert variant="success">{productName} added to Shopping Cart successfully.</Alert>)
         } catch (e) {
             setAlertJSX(<Alert variant="danger">ERROR: Failed to add product to Shopping Cart.</Alert>)
             console.log(e);
@@ -56,18 +56,20 @@ export default function AllProducts() {
                         <Card.Img variant="top" src={p.image_url} />
                         <Card.Body>
                             <Card.Title>{p.category.name}: {p.name}</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">${p.unit_base_price/100}</Card.Subtitle>
+                            <Card.Subtitle className="mb-2 text-muted">
+                                Price: ${p.unit_base_price/100}
+                                { p.quantity_in_stock <= 0 ? <span className="badge bg-warning">Low stock. Delivery within 1 week.</span> : null }
+                            </Card.Subtitle>
                             <Card.Text>{p.description}</Card.Text>
-                            <Card.Footer>Available: {p.quantity_in_stock}</Card.Footer>        
-                                       
+                            <Card.Footer>
+                                { p.tags.map( t => <span className="badge rounded-pill bg-info text-dark mx-1" key={t.id}>{t.name}</span> ) }
+                            </Card.Footer>
+
                             <Button variant="secondary" href={"/products/"+p.id} >View Product</Button>{' '}
                             { localStorage.getItem('userName') ? 
-                                <Button variant="success" onClick={() => addToCart(p.id, p.name)} >Add To Cart</Button>
-                                : null
-                            }
-                            
+                                <Button variant="primary" onClick={() => addToCart(p.id, p.name)} >Add To Cart</Button>
+                            : null }
                         </Card.Body>
-                        { p.tags.map( t => <span key={t.id}>{t.name}</span> ) }     
                     </Card>
                 </Col>) }
             </Row>
