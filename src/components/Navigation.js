@@ -10,7 +10,7 @@ export default function Navigation() {
         if (localStorage.getItem('userName')) {
             return (<React.Fragment>
                 <Nav.Link href='../profile' active>Hello {localStorage.getItem('userName')}</Nav.Link>
-                <Button className="ms-1"variant="light" href="/cart">Shopping Cart ({localStorage.getItem('cartTotalQuantity')})</Button> 
+                <Button className="ms-1"variant="light" href="/cart">Shopping Cart</Button> 
                 <Button className="mx-3" variant="dark" onClick={userContext.logout}>Logout</Button>
             </React.Fragment>)
         } else {
@@ -40,8 +40,7 @@ export default function Navigation() {
                 <Navbar.Collapse id='responsive-navbar-nav'>
                 <Nav className="me-auto">
                     <Nav.Link href='/'>Home</Nav.Link>
-                    {/* <Nav.Link href='../products'>Products</Nav.Link> */}
-                    {/* <Nav.Link href='../all-products'>Show All Products</Nav.Link> */}
+                    <Nav.Link href='../products'>Search</Nav.Link>
                     <Nav.Link href='../about'>About</Nav.Link>
                     <Nav.Link href='../contact'>Contact Us</Nav.Link>
                 </Nav>
@@ -51,7 +50,6 @@ export default function Navigation() {
                 </Navbar.Collapse>
             </Container>
         </Navbar>
-
     </React.Fragment>)
 
 }

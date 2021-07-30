@@ -12,21 +12,41 @@ export default function AllProducts() {
     const welcomeUser = location.state ? location.state.welcomeUser : null;
 
     const [products, setProducts] = useState([]);
+    const [alertJSX, setAlertJSX] = useState();
 
     useEffect(()=> {
         const fetch = async() => {
-            let baseURL = config.API_URL + "/products";
-            let response = await axios.get(baseURL);
-            setProducts(response.data)
-            console.log("AllProducts", response.data)
+            try {
+                let baseURL = config.API_URL + "/products";
+                let response = await axios.get(baseURL);
+                setProducts(response.data)
+                console.log("AllProducts", response.data)
+            } catch (e) {
+                setAlertJSX(<Alert variant="danger">ERROR: Failed to load Products from server.</Alert>)
+            }
         }
         fetch();
     }, []);
 
+    const addToCart = async (productId, productName) => {
+        let baseURL = config.API_URL + "/shopping-cart/" + productId + "/add";
+        try {
+            await axios.get(baseURL, {
+                'headers': {
+                    'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
+                }
+            });
+            setAlertJSX(<Alert variant="success">{productName} added to Shopping Cart successfully.</Alert>)            
+        } catch (e) {
+            setAlertJSX(<Alert variant="danger">ERROR: Failed to add product to Shopping Cart.</Alert>)
+            console.log(e);
+        }
+    }
+
     return (<React.Fragment>
         <Container>
             <Row>
-                { welcomeUser === 'N' ? <Alert variant="warning">Goodbye! You will need to login to Add to Cart.</Alert> : null }
+                { alertJSX ? alertJSX : null }
                 { welcomeUser === 'Y' ? <Alert variant="success">Welcome back to our shop, {localStorage.getItem('userName')}</Alert> : null } 
                 <h1>All Products in the store</h1>
             </Row>
@@ -41,7 +61,11 @@ export default function AllProducts() {
                             <Card.Footer>Available: {p.quantity_in_stock}</Card.Footer>        
                                        
                             <Button variant="secondary" href={"/products/"+p.id} >View Product</Button>{' '}
-                            <Button variant="success" href={"/cart/"+p.id} >Add To Cart</Button>
+                            { localStorage.getItem('userName') ? 
+                                <Button variant="success" onClick={() => addToCart(p.id, p.name)} >Add To Cart</Button>
+                                : null
+                            }
+                            
                         </Card.Body>
                         { p.tags.map( t => <span key={t.id}>{t.name}</span> ) }     
                     </Card>
