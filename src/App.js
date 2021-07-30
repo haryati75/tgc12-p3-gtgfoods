@@ -10,6 +10,8 @@ import AllProducts from './pages/AllProducts';
 import Navigation from './components/Navigation';
 import LoginPage from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
+import RegisterPage from './pages/RegisterPage';
+import ChangePassword from './pages/ChangePassword';
 
 import UserProvider from './UserProvider';
 import ShoppingCart from './pages/ShoppingCart';
@@ -46,6 +48,12 @@ export default function App() {
           </Route>
           <Route exact path="/profile">
             <UserProfile />
+          </Route>
+          <Route exact path="/register">
+            <RegisterPage />
+          </Route>
+          <Route exact path="/change-password">
+            <ChangePassword />
           </Route>
           <Route exact path="/cart">
             <ShoppingCart />
