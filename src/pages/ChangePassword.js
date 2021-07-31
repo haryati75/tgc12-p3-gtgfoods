@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
-
 import config from '../config';
 
 export default function ChangePassword() {
-    // create a history hook (cannot use this in an IF!)
-    const history = useHistory()
+
+    const [alertJSX, setAlertJSX] = useState();
 
     const [ formState, setFormState ] = useState({
         'oldPassword': '',
@@ -25,33 +23,41 @@ export default function ChangePassword() {
     }
 
     const submitForm = async () => {
-        // check for empty form
-        let message = "";
-        // call API to change password
+        // Validate inputs before submit
+        if (formState.newPassword === '' || formState.oldPassword === '' || formState.confirmPassword === '') {
+            setAlertJSX(<Alert variant="danger">All fields needs to be filled in.</Alert>)   
+            return;
+        }
+
+        if (formState.newPassword !== formState.confirmPassword) {
+            setAlertJSX(<Alert variant="danger">Confirm Password is not equal to New Password.</Alert>)   
+            return;
+        }
+
         try {
-            await axios.get(config.API_URL + "/users/change-password", {
-                'headers': {
-                    'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
-                },
-                'oldPassword': formState.oldPassword,
+            const options = { 'headers': {'Authorization' : 'Bear ' + localStorage.getItem('accessToken')} };
+            const data = {
+                'oldPassword': formState.oldPassword, 
                 'newPassword': formState.newPassword
-            });
-            message = "Password changed successfully."
+            }
+            await axios.put(config.API_URL + "/users/change_password", data, options);
+            setAlertJSX(<Alert variant="success">Password successfully changed.</Alert>) 
+            setFormState({
+                'oldPassword': '',
+                'newPassword': '',
+                'confirmPassword': ''
+            })
 
         } catch (e) {
-            console.log("API profile error", e)
-            message = "Re-enter correct password or re-login to change password."
+            setAlertJSX(<Alert variant="danger">Invalid credentials provided.</Alert>)   
         }
-        history.push('/profile', {
-            message
-        })
-
     }
 
     return (
         <React.Fragment>
         <Container>
-            <header>Change Password</header>
+            <header><h1>Change Password</h1></header>
+            { alertJSX ? alertJSX : null }
             <Form>
                 <Form.Group className="mb-3" controlId="oldPassword">
                     <Form.Label>Current Password</Form.Label>
@@ -74,9 +80,12 @@ export default function ChangePassword() {
                         onChange={updateFormField} />
                 </Form.Group>
 
-                <Button variant="primary" onClick={submitForm}>
+                <Button variant="primary" 
+                        onClick={submitForm}>
                     Submit
                 </Button>
+                <Button variant="secondary" href="/profile" >Back to Profile</Button>
+
             </Form>
         </Container>
         </React.Fragment>

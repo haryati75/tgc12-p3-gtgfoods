@@ -1,9 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 
 import UserContext from '../UserContext';
 
 export default function LoginPage() {
+
+    const location = useLocation();
+    const loginFail = location.state && location.state.loginFail ? location.state.loginFail : null;
 
     const [formState, setFormState] = useState({
         'email': "",
@@ -21,15 +25,14 @@ export default function LoginPage() {
 
     return <div>
         <Container>
+            <header><h1>Login Page</h1></header>
+            { loginFail ? <Alert variant="danger">Login Failed. Please try again.</Alert> : null }
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" 
                         name="email" value={formState.email}
                         onChange={updateFormField} />
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">

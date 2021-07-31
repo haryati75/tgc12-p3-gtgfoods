@@ -4,7 +4,9 @@ import axios from 'axios';
 import config from '../config';
 
 export default function UserProfile() {
+
     const [ profile, setProfile ] = useState({});
+    const [ customer, setCustomer ] = useState({})
     const [alertJSX, setAlertJSX] = useState();
 
     useEffect( () => {
@@ -16,7 +18,8 @@ export default function UserProfile() {
                         'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
                     }
                 });
-                setProfile(response.data)
+                setProfile(response.data.user);
+                setCustomer(response.data)
             } catch (e) {
                 console.log("API profile error", e)
                 setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
@@ -28,12 +31,19 @@ export default function UserProfile() {
 
     const renderProfile = () => {
         return (<React.Fragment>
+            { alertJSX ? alertJSX : null }
             <Card>
-                <Card.Header><Card.Title>User Profile</Card.Title></Card.Header>
+                <Card.Header><Card.Title>Customer Profile</Card.Title></Card.Header>
                 <Card.Body>
                     <ul>
-                        <li>User Name: {profile.username}</li>
+                        <li>Name: {profile.name}</li>
                         <li>Email: {profile.email}</li>
+                        <li>Contact No: {customer.contact_no}</li>
+                        <li>Delivery Address: {customer.address_blk} {customer.address_street_1} {customer.address_street_2}</li>
+                        <li>Unit: {customer.address_unit}</li>
+                        <li>Postal Code: Singapore {customer.address_postal_code}</li>
+                        <li>Gender: {customer.gender}</li>
+                        <li>Birth Date: {customer.birth_date}</li>
                     </ul>   
                 </Card.Body>
             </Card>

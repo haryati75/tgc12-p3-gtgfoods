@@ -44,7 +44,7 @@ export default function ProductView() {
                         <Card.Text>Ingredients: {product.ingredients}</Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                        <Button variant="success">Add To Cart</Button>
+                        <Button variant="success" href="/">Continue Shopping</Button>
                     </Card.Footer>
                 </Card> 
             </Container>

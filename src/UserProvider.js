@@ -31,9 +31,10 @@ export default function UserProvider(props) {
         logout: async () => {
             let refreshToken = localStorage.getItem('refreshToken');
             try {
-                await axios.post(config.API_URL + "/users/logout", {
+                let response = await axios.post(config.API_URL + "/users/logout", {
                     refreshToken
                 });
+                console.log("logout successful", response);
             } catch(e) {
                 console.log("logout error", e)
             }
@@ -41,7 +42,7 @@ export default function UserProvider(props) {
             localStorage.clear();
             userContext.setUser(null)
             history.push('/', {
-                welcomeUser : 'N'
+                welcomeUser : 'N',
             })
         },
 
@@ -67,8 +68,10 @@ export default function UserProvider(props) {
                 })
             } catch (e) {
                 localStorage.clear();
-                alert("Login Failed!", e)
-                history.push('/')
+                userContext.setUser(null)
+                history.push('/login', {
+                    loginFail : 'Y'
+                })
             }
         }
     }

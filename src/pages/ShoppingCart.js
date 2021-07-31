@@ -34,7 +34,7 @@ export default function ShoppingCart() {
         console.log("Removing from shopping cart", cartItem.product_id);
         let baseURL = config.API_URL + "/shopping-cart/" + cartItem.product_id + "/remove";
         try {
-            await axios.get(baseURL, {
+            await axios.delete(baseURL, {
                 'headers': {
                     'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
                 }
@@ -59,7 +59,7 @@ export default function ShoppingCart() {
     const clearCart = async (productId) => {
         let baseURL = config.API_URL + "/shopping-cart/clear";
         try {
-            await axios.get(baseURL, {
+            await axios.delete(baseURL, {
                 'headers': {
                     'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
                 }
