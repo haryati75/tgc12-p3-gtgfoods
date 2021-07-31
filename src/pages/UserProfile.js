@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Container, Card, Button } from 'react-bootstrap';
+import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
 
@@ -33,7 +34,7 @@ export default function UserProfile() {
         return (<React.Fragment>
             { alertJSX ? alertJSX : null }
             <Card>
-                <Card.Header><Card.Title>Customer Profile</Card.Title></Card.Header>
+                <Card.Header><Card.Title>{customer.first_name}'s Profile</Card.Title></Card.Header>
                 <Card.Body>
                     <ul>
                         <li>Name: {profile.name}</li>
@@ -42,12 +43,13 @@ export default function UserProfile() {
                         <li>Delivery Address: {customer.address_blk} {customer.address_street_1} {customer.address_street_2}</li>
                         <li>Unit: {customer.address_unit}</li>
                         <li>Postal Code: Singapore {customer.address_postal_code}</li>
-                        <li>Gender: {customer.gender}</li>
-                        <li>Birth Date: {customer.birth_date}</li>
+                        <li>Gender: {customer.gender === 'F' ? 'Female' : 'Male'}</li>
+                        <li>Birth Date: <Moment format="DD/MM/YYYY">{customer.birth_date}</Moment></li>
                     </ul>   
                 </Card.Body>
             </Card>
             <Button variant="secondary" href="/change-password" >Change Password</Button>
+            <Button variant="secondary" href="/update-profile" >Update My Profile</Button>
         </React.Fragment>)
     }
 
