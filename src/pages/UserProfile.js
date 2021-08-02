@@ -48,7 +48,7 @@ export default function UserProfile() {
                     </ul>   
                 </Card.Body>
             </Card>
-            <Button variant="secondary" href="/change-password" >Change Password</Button>
+            <Button variant="secondary" href="/change-password" >Change Password</Button>{' '}
             <Button variant="secondary" href="/update-profile" >Update My Profile</Button>
         </React.Fragment>)
     }

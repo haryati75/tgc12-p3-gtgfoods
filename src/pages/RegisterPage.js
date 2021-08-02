@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import React, { useState, useContext } from 'react';
 import { Container, Form, Row, Col, Button, Alert } from 'react-bootstrap';
-import DatePicker from "react-datepicker";
 
-import "react-datepicker/dist/react-datepicker.css";
+import axios from 'axios';
+import config from '../config';
+import UserContext from '../UserContext';
 
 export default function RegisterPage() {
 
     // create a history hook (cannot use this in an IF!)
-    const history = useHistory()
-
-    const [birthDate, setBirthDate] = useState(new Date());
+    const userContext = useContext(UserContext);
 
     const [ formState, setFormState ] = useState({
         // Customer data
@@ -23,7 +21,7 @@ export default function RegisterPage() {
         'address_street_2': '',
         'address_postal_code': '',
         'gender': '',
-        'birth_date': null,
+        'birth_date': '',
 
         // User data
         'email': '',
@@ -43,24 +41,45 @@ export default function RegisterPage() {
     const [validated, setValidated] = useState(false);
     const [alertJSX, setAlertJSX] = useState();
 
+
     const handleSubmit = (event) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
-        }
-    
+        } 
         setValidated(true);
-        submitForm();
+        submitForm(event);
     };
 
-    function submitForm() {
-        if (validated) {
-            history.push('/', {
-                welcomeUser : 'Y'
-            })
+    const submitForm = async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const { email, password, confirm_password, ...customerData } = formState;
+
+        if (validated && formState.first_name !== '' && email !== '' && password !== '' && password === confirm_password) {
+            const userData = {
+                'name': formState.first_name + ' ' + formState.last_name,
+                email,
+                password
+            }
+            // call API to register user and login when successful
+            try {
+                let response = await axios.post(config.API_URL + "/users/register", {
+                    'user': userData, 
+                    'customer': {...customerData}                    
+                });
+                console.log(response.data);
+                userContext.login(email, password)
+               
+            } catch (e) {
+                console.log("Register failed >> ", e)
+                setAlertJSX(<Alert variant="danger">Registration failed. Please try again.</Alert>)   
+            }
+        } else if (password !== confirm_password) {
+            setAlertJSX(<Alert variant="danger">Confirm Password did not match with Password.</Alert>)
         } else {
-            setAlertJSX(<Alert variant="danger">You have not keyed in the required fields.</Alert>)
+            setAlertJSX(<Alert variant="danger">You have not entered the required fields.</Alert>)
         }
     }
 
@@ -90,25 +109,37 @@ export default function RegisterPage() {
 
                     <Form.Group as={Col} md="4" className="mb-3" controlId="formContactNo">
                         <Form.Label>Contact No</Form.Label>
-                        <Form.Control required type="text" placeholder="Enter main contact number" 
+                        <Form.Control type="text" placeholder="Enter main contact number" 
                             name="contact_no" value={formState.contact_no}
                             onChange={updateFormField} />
-                        <Form.Control.Feedback>Fantastic!</Form.Control.Feedback>
                     </Form.Group>
                 </Row>
                 <Row>
-                    <Form.Group as={Col} md="7" className="mb-3" controlId="formEmail">
+                    <Form.Group as={Col} md="6" className="mb-3" controlId="formEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control required type="email" placeholder="Enter email" 
                             name="email" value={formState.email}
                             onChange={updateFormField} />
+                        <Form.Control.Feedback type="invalid">
+                            Please enter your email address.
+                        </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group as={Col} md="5" className="mb-3" controlId="formPassword">
+                    <Form.Group as={Col} md="3" className="mb-3" controlId="formPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control required type="password" placeholder="Password" 
                             name="password" value={formState.password} 
                             onChange={updateFormField} />
+                    </Form.Group>
+
+                    <Form.Group as={Col} md="3" className="mb-3" controlId="formConfirmPassword">
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control required type="password" placeholder="Confirm Password" 
+                            name="confirm_password" value={formState.confirm_password} 
+                            onChange={updateFormField} />
+                        <Form.Control.Feedback type="invalid">
+                            Not Match. Please confirm password again.
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Row>
                 <hr></hr>
@@ -148,9 +179,21 @@ export default function RegisterPage() {
                         onChange={updateFormField} />
                 </Form.Group>
                 </Row>
-                <Form.Group className="mb-3" controlId="formGender">
-                    <Form.Label>Gender:</Form.Label>
+                <Row>
+                <Form.Group className="mb-6" controlId="formGender">
+                    <Form.Label>Gender:</Form.Label>{' '}
                     <Form.Check 
+                        inline
+                        type="radio"
+                        name="gender"
+                        id="formGenderNotProvided"
+                        label="Not Provided"
+                        value="-"
+                        checked={formState.gender==='-'}
+                        onChange={updateFormField}
+                    />
+                    <Form.Check 
+                        inline
                         type="radio"
                         name="gender"
                         id="formGenderFemale"
@@ -160,6 +203,7 @@ export default function RegisterPage() {
                         onChange={updateFormField}
                     />
                     <Form.Check 
+                        inline
                         type="radio"
                         name="gender"
                         id="formGenderMale"
@@ -170,15 +214,13 @@ export default function RegisterPage() {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBirthDate">
-                    <Form.Label>Date of Birth</Form.Label>{' '}
-                    <DatePicker selected={birthDate} 
-                        isClearable 
-                        closeOnScroll={true}
-                        dateFormat="dd MMM yyyy"
-                        onChange={(date) => setBirthDate(date)} />
+                <Form.Group as={Col} md="6" className="mb-3" controlId="formBirthDate">
+                    <Form.Label>Birth Date (YYYY-MM-DD)</Form.Label>
+                    <Form.Control type="text" placeholder="Enter birth date" 
+                        name="birth_date" value={formState.birth_date}
+                        onChange={updateFormField} />
                 </Form.Group>
-
+                </Row>
                 <Button type="submit">Submit form</Button>
             </Form>
         </Container>
