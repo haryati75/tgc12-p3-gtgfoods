@@ -20,7 +20,7 @@ export default function RegisterPage() {
         'address_street_1': '',
         'address_street_2': '',
         'address_postal_code': '',
-        'gender': '',
+        'gender': '-',
         'birth_date': '',
 
         // User data
@@ -38,26 +38,15 @@ export default function RegisterPage() {
         )
     }
 
-    const [validated, setValidated] = useState(false);
+
     const [alertJSX, setAlertJSX] = useState();
-
-
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        } 
-        setValidated(true);
-        submitForm(event);
-    };
 
     const submitForm = async (event) => {
         event.preventDefault();
         event.stopPropagation();
         const { email, password, confirm_password, ...customerData } = formState;
 
-        if (validated && formState.first_name !== '' && email !== '' && password !== '' && password === confirm_password) {
+        if (formState.first_name !== '' && email !== '' && password !== '' && password === confirm_password) {
             const userData = {
                 'name': formState.first_name + ' ' + formState.last_name,
                 email,
@@ -73,13 +62,13 @@ export default function RegisterPage() {
                 userContext.login(email, password)
                
             } catch (e) {
-                console.log("Register failed >> ", e)
-                setAlertJSX(<Alert variant="danger">Registration failed. Please try again.</Alert>)   
+                console.log("Register failed >> ", e.status, e.message)
+                setAlertJSX(<Alert variant="danger">Credential already exists. Please try login.</Alert>)   
             }
         } else if (password !== confirm_password) {
             setAlertJSX(<Alert variant="danger">Confirm Password did not match with Password.</Alert>)
         } else {
-            setAlertJSX(<Alert variant="danger">You have not entered the required fields.</Alert>)
+            setAlertJSX(<Alert variant="danger">Required fields not keyed in. Please try again.</Alert>) 
         }
     }
 
@@ -89,7 +78,8 @@ export default function RegisterPage() {
             <header className="card-header"><h1>Register with GreatToGo Foods today!</h1></header>
             { alertJSX ? alertJSX : null }
 
-            <Form className="card-body" noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form className="card-body">
+                <Row><h5>Required Fields:</h5></Row>
                 <Row>
                     <Form.Group as={Col} md="4" className="mb-3" controlId="formFirstName">
                         <Form.Label>First Name</Form.Label>
@@ -109,7 +99,7 @@ export default function RegisterPage() {
 
                     <Form.Group as={Col} md="4" className="mb-3" controlId="formContactNo">
                         <Form.Label>Contact No</Form.Label>
-                        <Form.Control type="text" placeholder="Enter main contact number" 
+                        <Form.Control required type="text" placeholder="Enter main contact number" 
                             name="contact_no" value={formState.contact_no}
                             onChange={updateFormField} />
                     </Form.Group>
@@ -143,6 +133,7 @@ export default function RegisterPage() {
                     </Form.Group>
                 </Row>
                 <hr></hr>
+                <Row><h5>Optional:</h5></Row>
                 <Row>
                 <Form.Group as={Col} md="4" className="mb-3" controlId="formAddressBlk">
                     <Form.Label>Block No</Form.Label>
@@ -221,7 +212,7 @@ export default function RegisterPage() {
                         onChange={updateFormField} />
                 </Form.Group>
                 </Row>
-                <Button type="submit">Submit form</Button>
+                <Button onClick={submitForm}>Submit Registration</Button>
             </Form>
         </Container>
 

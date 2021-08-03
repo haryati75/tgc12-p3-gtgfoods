@@ -74,7 +74,7 @@ export default function ShoppingCart() {
     }
 
     const checkout = async () => {
-        console.log("checking out");
+        console.log("React checking out");
         let callingURL = config.API_URL + "/checkout";
         try {
             window.location.replace(callingURL + "?token=" + localStorage.getItem("accessToken") + "&callback=" + config.BASE_URL) 

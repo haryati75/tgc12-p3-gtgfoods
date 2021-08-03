@@ -17,9 +17,7 @@ export default function ProductView() {
         const fetchProduct = async () => {
             
             try {
-                console.log("before axios.get Product >>", product_id)
                 const response = await axios.get(config.API_URL + "/products/"  + product_id);
-                console.log("after axios >>>", response.data);
                 setProduct(response.data);
             } catch (e) {
                 console.log("ProductView err axios", e);
