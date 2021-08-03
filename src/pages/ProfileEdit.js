@@ -1,38 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from "react-router-dom";
 import { Container, Form, Row, Col, Button, Alert } from 'react-bootstrap';
-// import Moment from 'moment';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
 import UserContext from '../UserContext';
 
-export default function RegisterPage() {
+export default function UserProfile() {
 
+    const history = useHistory();
     const userContext = useContext(UserContext);
 
-    const [ birthDate, setBirthDate ] = useState(new Date());
-
-    const formatDate = (date) => {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-    
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-    
-        return [year, month, day].join('-');
-    }
-
-    useEffect(() => {
-        setFormState({
-            ...formState,
-            'birth_date': formatDate(birthDate)
-        })
-    
-    }, [birthDate]);
+    const [alertJSX, setAlertJSX] = useState();
 
     const [ formState, setFormState ] = useState({
         // Customer data
@@ -62,16 +38,47 @@ export default function RegisterPage() {
         )
     }
 
-    const [alertJSX, setAlertJSX] = useState();
+    useEffect( () => {
+        // load in the user profile using the access token
+        async function fetch() {
+
+            const result = await userContext.getProfile();
+            if (result.status === 200) {
+                // set FormState data
+                console.log("getProfile", result.data)
+                let { id, user_id, user, ...customerData } = result.data
+                let formData = {
+                    ...customerData,
+                    'email': user.email,
+                    'password': 'blank',
+                    'confirm_password':'blank'
+                }
+                setFormState({
+                    ...formData
+                })
+
+            } else {
+                if (result.status === 403 || result.status === 401) {
+                    setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
+                } else {
+                    setAlertJSX(<Alert variant="danger">Unable to retrieve profile.</Alert>)
+                }
+      
+            }  
+
+        }
+        fetch();
+    }, [])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        console.log("DOB", formState.birth_date)
-
-        let result = await userContext.register(formState);
-        if (result) {
+        let result = await userContext.saveProfile(formState);
+        if (result === 200) {
+            history.push('/profile')
+        }
+        if (result && result !== 200) {
             if (typeof result === "string") {
             setAlertJSX(result);
             } else {
@@ -80,10 +87,9 @@ export default function RegisterPage() {
         }
     }
 
-    return (
-        <React.Fragment>
-        <Container className="card">
-            <header className="card-header"><h1>Register with GreatToGo Foods today!</h1></header>
+    const renderProfile = () => {
+        return (<React.Fragment>
+            <header className="card-header"><h1>Edit Profile</h1></header>
             <div>{ alertJSX ? <Alert variant="danger">{alertJSX}</Alert> : null }</div>
 
             <Form className="card-body">
@@ -118,7 +124,7 @@ export default function RegisterPage() {
                             onChange={updateFormField} />
                     </Form.Group>
 
-                    <Form.Group as={Col} md="3" className="mb-3" controlId="formPassword">
+                    {/* <Form.Group as={Col} md="3" className="mb-3" controlId="formPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control required type="password" placeholder="Password" 
                             name="password" value={formState.password} 
@@ -130,7 +136,7 @@ export default function RegisterPage() {
                         <Form.Control required type="password" placeholder="Confirm Password" 
                             name="confirm_password" value={formState.confirm_password} 
                             onChange={updateFormField} />
-                    </Form.Group>
+                    </Form.Group> */}
                 </Row>
                 <hr></hr>
                 <Row><h5>Optional:</h5></Row>
@@ -206,22 +212,25 @@ export default function RegisterPage() {
                 </Form.Group>
 
                 <Form.Group as={Col} md="6" className="mb-3" controlId="formBirthDate">
-                    <Form.Label>Birth Date</Form.Label>
-
-                    {/* <Form.Control type="text" placeholder="Enter birth date" 
+                    <Form.Label>Birth Date (YYYY-MM-DD)</Form.Label>
+                    <Form.Control type="text" placeholder="Enter birth date" 
                         name="birth_date" value={formState.birth_date}
-                        onChange={updateFormField} /> */}
-
-                    <DatePicker dateFormat={"dd-MM-yyyy"} selected={birthDate}  
-                        onChange={date => setBirthDate(date)}/>
-
+                        onChange={updateFormField} />
                 </Form.Group>
-
                 </Row>
-                <Button onClick={handleSubmit}>Submit Registration</Button>
+                <Button onClick={handleSubmit}>Save Profile</Button>{' '}
+                <Button variant="secondary" href="/profile" >Cancel</Button>
             </Form>
-        </Container>
 
+        </React.Fragment>)
+    }
+
+    return (
+        <React.Fragment>
+            <Container className="card">
+                { renderProfile() }
+            </Container>
         </React.Fragment>
     )
+
 }

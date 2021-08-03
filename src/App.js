@@ -11,6 +11,7 @@ import Navigation from './components/Navigation';
 import LoginPage from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
 import RegisterPage from './pages/RegisterPage';
+import ProfileEdit from './pages/ProfileEdit';
 import ChangePassword from './pages/ChangePassword';
 
 import UserProvider from './UserProvider';
@@ -51,6 +52,9 @@ export default function App() {
           </Route>
           <Route exact path="/register">
             <RegisterPage />
+          </Route>
+          <Route exact path="/edit-profile">
+            <ProfileEdit />
           </Route>
           <Route exact path="/change-password">
             <ChangePassword />

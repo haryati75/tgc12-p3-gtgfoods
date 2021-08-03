@@ -73,6 +73,56 @@ export default function UserProvider(props) {
                     loginFail : 'Y'
                 })
             }
+        },
+
+        getProfile: async () => {
+            try {
+                const response = await axios.get(config.API_URL + "/users/profile", {
+                    'headers': {
+                        'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
+                    }
+                });
+                return response;
+            } catch (e) {
+                if (e.response) {
+                    return (e.response)
+                }
+                console.log("API profile error", e)
+            }
+        },
+
+        register: async (formState) => {
+            const { email, password } = formState;
+            try {
+                await axios.post(config.API_URL + "/users/profile", {
+                    ...formState
+                });
+                // auto login user 
+                userContext.login(email, password);
+            } catch (error) {
+                console.log("Register failed >> ", error.response.data.error)
+                if (error.response) {
+                    return(error.response.data.error)
+                }
+                return (error);
+            }
+        },
+
+        saveProfile: async (formState) => {
+            try {
+                const options = { 'headers': {'Authorization' : 'Bear ' + localStorage.getItem('accessToken')} };
+                const data = {
+                    ...formState
+                }
+                const response = await axios.put(config.API_URL + "/users/profile", data, options);
+                return response;
+            } catch (error) {
+                console.log("Register failed >> ", error.response.data.error)
+                if (error.response) {
+                    return(error.response.data.error)
+                }
+                return (error);
+            }
         }
     }
 

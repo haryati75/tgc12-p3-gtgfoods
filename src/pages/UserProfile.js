@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Alert, Container, Card, Button } from 'react-bootstrap';
 import Moment from 'react-moment';
-import axios from 'axios';
-import config from '../config';
+import UserContext from '../UserContext';
 
 export default function UserProfile() {
 
+    const userContext = useContext(UserContext);
+
     const [ profile, setProfile ] = useState({});
     const [ customer, setCustomer ] = useState({})
-    const [alertJSX, setAlertJSX] = useState();
+    const [ alertJSX, setAlertJSX ] = useState();
 
     useEffect( () => {
         // load in the user profile using the access token
         async function fetch() {
-            try {
-                const response = await axios.get(config.API_URL + "/users/profile", {
-                    'headers': {
-                        'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
-                    }
-                });
-                setProfile(response.data.user);
-                setCustomer(response.data)
-            } catch (e) {
-                console.log("API profile error", e)
-                setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
-                setProfile(null);
-            }
+            const result = await userContext.getProfile();
+            if (result.status === 200) {
+                setProfile(result.data.user);
+                setCustomer(result.data)
+            } else {
+                if (result.status === 403 || result.status === 401) {
+                    setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
+                } else {
+                    setAlertJSX(<Alert variant="danger">Unable to retrieve profile.</Alert>)
+                }
+                setProfile(null); 
+                setCustomer(null);            
+            }  
         }
         fetch();
     }, [])
@@ -49,7 +50,7 @@ export default function UserProfile() {
                 </Card.Body>
             </Card>
             <Button variant="secondary" href="/change-password" >Change Password</Button>{' '}
-            <Button variant="secondary" href="/update-profile" >Update My Profile</Button>
+            <Button variant="secondary" href="/edit-profile" >Update My Profile</Button>
         </React.Fragment>)
     }
 
