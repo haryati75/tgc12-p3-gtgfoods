@@ -8,10 +8,26 @@ export default function UserProfile() {
     const history = useHistory();
     const userContext = useContext(UserContext);
 
+    // to format YYYY-MM-DD for caolan form validation
+    const formatDate = (date) => {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
+
     const [alertJSX, setAlertJSX] = useState();
 
     const [ formState, setFormState ] = useState({
         // Customer data
+        'id': 0,
         'first_name': '',
         'last_name' : '',
         'contact_no': '',
@@ -24,6 +40,7 @@ export default function UserProfile() {
         'birth_date': '',
 
         // User data
+        'user_id': 0,
         'email': '',
         'password': '',
         'confirm_password': ''
@@ -46,9 +63,11 @@ export default function UserProfile() {
             if (result.status === 200) {
                 // set FormState data
                 console.log("getProfile", result.data)
-                let { id, user_id, user, ...customerData } = result.data
+                const { user, birth_date, ...customerData } = result.data
+                const formattedBirthDate = formatDate(birth_date);
                 let formData = {
                     ...customerData,
+                    'birth_date': formattedBirthDate,
                     'email': user.email,
                     'password': 'blank',
                     'confirm_password':'blank'
@@ -74,11 +93,14 @@ export default function UserProfile() {
         event.preventDefault();
         event.stopPropagation();
 
+        console.log("Submit form", formState);
+
         let result = await userContext.saveProfile(formState);
-        if (result === 200) {
+        console.log(result);
+        if (result.status === 200) {
             history.push('/profile')
         }
-        if (result && result !== 200) {
+        if (result && result.status !== 200) {
             if (typeof result === "string") {
             setAlertJSX(result);
             } else {
@@ -123,20 +145,6 @@ export default function UserProfile() {
                             name="email" value={formState.email}
                             onChange={updateFormField} />
                     </Form.Group>
-
-                    {/* <Form.Group as={Col} md="3" className="mb-3" controlId="formPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control required type="password" placeholder="Password" 
-                            name="password" value={formState.password} 
-                            onChange={updateFormField} />
-                    </Form.Group>
-
-                    <Form.Group as={Col} md="3" className="mb-3" controlId="formConfirmPassword">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control required type="password" placeholder="Confirm Password" 
-                            name="confirm_password" value={formState.confirm_password} 
-                            onChange={updateFormField} />
-                    </Form.Group> */}
                 </Row>
                 <hr></hr>
                 <Row><h5>Optional:</h5></Row>

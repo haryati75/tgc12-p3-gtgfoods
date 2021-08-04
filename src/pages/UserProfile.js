@@ -50,7 +50,7 @@ export default function UserProfile() {
                 </Card.Body>
             </Card>
             <Button variant="secondary" href="/change-password" >Change Password</Button>{' '}
-            <Button variant="secondary" href="/edit-profile" >Update My Profile</Button>
+            <Button variant="primary" href="/edit-profile" >Update My Profile</Button>
         </React.Fragment>)
     }
 

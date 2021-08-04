@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Container, Form, Row, Col, Button, Alert } from 'react-bootstrap';
-// import Moment from 'moment';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -12,6 +11,7 @@ export default function RegisterPage() {
 
     const [ birthDate, setBirthDate ] = useState(new Date());
 
+    // to format YYYY-MM-DD for caolan form validation
     const formatDate = (date) => {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -80,8 +80,7 @@ export default function RegisterPage() {
         }
     }
 
-    return (
-        <React.Fragment>
+    return (<React.Fragment>
         <Container className="card">
             <header className="card-header"><h1>Register with GreatToGo Foods today!</h1></header>
             <div>{ alertJSX ? <Alert variant="danger">{alertJSX}</Alert> : null }</div>
@@ -221,7 +220,5 @@ export default function RegisterPage() {
                 <Button onClick={handleSubmit}>Submit Registration</Button>
             </Form>
         </Container>
-
-        </React.Fragment>
-    )
+    </React.Fragment>)
 }
