@@ -15,15 +15,17 @@ export default function UserProfile() {
         // load in the user profile using the access token
         async function fetch() {
             const result = await userContext.getProfile();
-            if (result.status === 200) {
-                setProfile(result.data.user);
-                setCustomer(result.data)
-            } else {
-                if (result.status === 403 || result.status === 401) {
-                    setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
+            if (result && result.status) {
+                if (result.status === 200) {
+                    setProfile(result.data.user);
+                    setCustomer(result.data)
                 } else {
-                    setAlertJSX(<Alert variant="danger">Unable to retrieve profile.</Alert>)
+                    setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
+                    setProfile(null); 
+                    setCustomer(null);
                 }
+            } else {
+                setAlertJSX(<Alert variant="danger">Unable to retrieve profile from server.</Alert>)
                 setProfile(null); 
                 setCustomer(null);            
             }  
@@ -49,8 +51,9 @@ export default function UserProfile() {
                     </ul>   
                 </Card.Body>
             </Card>
-            <Button variant="secondary" href="/change-password" >Change Password</Button>{' '}
-            <Button variant="primary" href="/edit-profile" >Update My Profile</Button>
+            <Button variant="warning" href="/change-password" >Change Password</Button>{' '}
+            <Button variant="secondary" href="/edit-profile" >Update My Profile</Button>{' '}
+            <Button variant="primary" href="/view-pending-order" >View Pending Order</Button>{' '}
         </React.Fragment>)
     }
 

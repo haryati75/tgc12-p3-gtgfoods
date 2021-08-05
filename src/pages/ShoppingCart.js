@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Col, Card, Button, Alert, Table } from 'react-bootstrap';
+import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
 
@@ -8,6 +9,8 @@ export default function ShoppingCart() {
     const [cartItems, setCartItems] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalQuantity, setTotalQuantity] = useState(0);
+    const [customer, setCustomer] = useState({});
+    const [deliveryDate, setDeliveryDate] = useState((new Date()).getDate() + 3)
     const [alertJSX, setAlertJSX] = useState();
 
     useEffect(()=> {
@@ -22,6 +25,7 @@ export default function ShoppingCart() {
                 setCartItems(response.data.cartItems);
                 setTotalAmount(response.data.totalAmount);
                 setTotalQuantity(response.data.totalQuantity);
+                setCustomer(response.data.customer);
             } catch (e) {
                 setAlertJSX(<Alert variant="danger">You need to login/register to access the Shopping Cart.</Alert>)     
                 console.log("Shopping Cart failed access >> ", e)
@@ -56,7 +60,7 @@ export default function ShoppingCart() {
         }
     }
 
-    const clearCart = async (productId) => {
+    const clearCart = async () => {
         let baseURL = config.API_URL + "/shopping-cart/clear";
         try {
             await axios.delete(baseURL, {
@@ -125,6 +129,16 @@ export default function ShoppingCart() {
                     <Col>
                         <h5>Total Quantity: {totalQuantity} | Total Amount: ${totalAmount}</h5>
                         <Button variant="success"onClick={checkout} >Proceed to Checkout</Button>                    
+                    </Col>
+                    <Col>
+                        <h5>Delivery will be send to:</h5>
+                        <ul>
+                            <li>Address: {customer.address_blk} {customer.address_street_1} {customer.address_street_2}</li>
+                            <li>Unit: {customer.address_unit}</li>
+                            <li>Postal Code: Singapore {customer.address_postal_code}</li>
+                        </ul>
+                        <h6>Delivery date: <Moment format="DD/MM/YYYY">{deliveryDate}</Moment></h6>
+                        <Button variant="secondary" href="/edit-profile" >Change Address</Button>{' '}
                     </Col>
                 </Card.Footer>
             </Card>
