@@ -11,8 +11,6 @@ export default function ReceiptPage() {
     const [order, setOrder] = useState({});
     const [alertJSX, setAlertJSX] = useState();
 
-    // create use effect to call API checkout/show-order
-
     useEffect(()=> {
         const timer = setTimeout(() => {
             console.log("Delaying call to API after Stripe success payment....")
@@ -32,7 +30,7 @@ export default function ReceiptPage() {
                     'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
                 }
             });
-            console.log("API get order called", response);
+            console.log("API get order called", response.data.order.orderItems);
             setOrder(response.data.order)
 
         } catch (e) {
@@ -42,39 +40,48 @@ export default function ReceiptPage() {
 
     }
 
+    const renderReceipt = () =>  {
+        return (<React.Fragment>
+
+            
+            <Card.Body>
+                <Card.Subtitle><h3>Your Order is currently being processed</h3></Card.Subtitle>
+                <ul>
+                    <li>Order Id: {order.id} </li>
+                    <li>Order Date: <Moment format="DD/MM/YYYY">{order.order_date}</Moment></li>
+                    <li>Order Status: {order.order_status}</li>
+                    <li>Order Delivery Date: <Moment format="DD/MM/YYYY">{order.delivery_date}</Moment></li>
+                    <li>Order Delivery Address: {order.delivery_address}</li>
+                </ul>
+            </Card.Body>
+                     
+            <Card>
+                <Card.Header>Ordered Items: </Card.Header>
+                <Card.Body>
+                    <ListGroup variant="flush">
+                        {order.orderItems ? order.orderItems.map(item => <ListGroup.Item key={item.id}>
+                            {item.product.category.name}: {item.product.name} | Quantity: {item.quantity} | Price: {item.unitPriceStr} | Amount: {item.amountStr}
+                        </ListGroup.Item>) : null}
+                    </ListGroup>                        
+                </Card.Body>
+                <Card.Footer>
+                    <h5>Total Amount: $ {(order.order_amount_total / 100).toFixed(2)}</h5>
+                </Card.Footer>
+            </Card>
+        </React.Fragment>)
+    }
+
     return (
         <React.Fragment>
             <Container>
+                { alertJSX ? alertJSX : null }
                 <Card>
-                    <Card.Header><h1>Receipt Page - Payment Successful</h1></Card.Header>
-                    {/* Render Order here */}
-                    <Card.Text className="text-muted">Stripe Id: {sessionId} </Card.Text>
-                    <Card.Text className="text-muted">Order Id: {order.id} </Card.Text>
-
-                    <Card.Body>
-                        <ul>
-                            <li>Order Date: <Moment format="DD/MM/YYYY">{order.order_date}</Moment></li>
-                            <li>Order Status: {order.order_status}</li>
-                            <li>Order Delivery Date: <Moment format="DD/MM/YYYY">{order.delivery_date}</Moment></li>
-                            <li>Order Delivery Address: {order.delivery_address}</li>
-                        </ul>
-                    </Card.Body>
-                </Card>                
-                <Card>
-                    <Card.Header>Ordered Items: </Card.Header>
-                    <Card.Body>
-                        <ListGroup variant="flush">
-                            {order.orderItems.map(item => <ListGroup.Item key={item.id}>
-                                {item.product.category.name}: {item.product.name} | Quantity: {item.quantity} | Price: {item.unitPriceStr} | Amount: {item.amountStr}
-                            </ListGroup.Item>)}
-                        </ListGroup>                        
-                    </Card.Body>
-                    <Card.Footer>
-                        <h5>Total Amount: $ {(order.order_amount_total / 100).toFixed(2)}</h5>
-                    </Card.Footer>
+                    <Card.Header><h1>Stripe Payment Successful - Thank You!</h1></Card.Header>
+                    { order ? renderReceipt() : null }                    
                 </Card>
 
             </Container>
         </React.Fragment>
     )
+    
 }

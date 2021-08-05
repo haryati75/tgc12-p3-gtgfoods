@@ -10,7 +10,7 @@ export default function ShoppingCart() {
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [customer, setCustomer] = useState({});
-    const [deliveryDate, setDeliveryDate] = useState((new Date()).getDate() + 3)
+    const [deliveryDate, setDeliveryDate] = useState(new Date());
     const [alertJSX, setAlertJSX] = useState();
 
     useEffect(()=> {
@@ -26,6 +26,10 @@ export default function ShoppingCart() {
                 setTotalAmount(response.data.totalAmount);
                 setTotalQuantity(response.data.totalQuantity);
                 setCustomer(response.data.customer);
+
+                let newDeliveryDate = new Date();
+                newDeliveryDate.setDate(newDeliveryDate.getDate() + 1);
+                setDeliveryDate(newDeliveryDate);
             } catch (e) {
                 setAlertJSX(<Alert variant="danger">You need to login/register to access the Shopping Cart.</Alert>)     
                 console.log("Shopping Cart failed access >> ", e)
@@ -33,6 +37,40 @@ export default function ShoppingCart() {
         }
         fetch();
     }, []);
+
+    const addQuantity = async (cartItem, quantity) => {
+        console.log("Adding 1 to cart product quantity: ", cartItem.product_id);
+        let baseURL = config.API_URL + "/shopping-cart/" + cartItem.product_id + "/quantity/add/" + quantity;
+        try {
+            let response = await axios.get(baseURL, {
+                'headers': {
+                    'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
+                }
+            });
+            let updatedCartItem = response.data.cartItem;
+            console.log(updatedCartItem);
+            if (updatedCartItem) {
+
+                let wantedCartItem = cartItems.filter(item => item.id === updatedCartItem.id ? item : null)[0];
+                let clonedCartItem = {...wantedCartItem};
+                clonedCartItem.quantity = updatedCartItem.quantity;
+
+                let indexToChange = cartItems.findIndex(item => item.id === clonedCartItem.id);
+                let clonedArray = [
+                    ...cartItems.slice(0, indexToChange),
+                    clonedCartItem,
+                    ...cartItems.slice(indexToChange + 1)
+                ]
+                setCartItems(clonedArray);
+                console.log("successfully added quantity to product", clonedArray);
+            } else {
+                throw("Error: Quantity not added.")
+            }
+        } catch (e) {
+            console.log("error adding quantity from cart product: ", e)
+            setAlertJSX(<Alert variant="danger">Failed to add/reduce quantity for {cartItem.product.name}.</Alert>)            
+        }
+    }
 
     const removeFromCart = async (cartItem) => {
         console.log("Removing from shopping cart", cartItem.product_id);
@@ -116,9 +154,14 @@ export default function ShoppingCart() {
                         <td><img className="thumbnail rounded" style={{maxHeight:"200px", maxWidth:"200px"}} src={c.product.image_url} alt={c.product.name}/> </td>
                         <td>{c.product.category.name}: {c.product.name}</td>
                         <td>$ {c.unitPriceStr}</td>
-                        <td>  {c.quantity}</td>
+                        <td>  
+                            <span className="me-3">{c.quantity}</span>
+                            <Button variant="primary" onClick={() => addQuantity(c, 1)}>+</Button>{' '}
+                            <Button variant="secondary" onClick={() => addQuantity(c, -1)}>-</Button>
+                        </td>
                         <td>$ {c.amountStr}</td>
                         <td>
+                            <Button variant="secondary" href={"/products/"+c.product_id} >View Product</Button>{' '}
                             <Button variant="danger" onClick={() => removeFromCart(c)}>Remove</Button>
                         </td>
                     </tr>) }

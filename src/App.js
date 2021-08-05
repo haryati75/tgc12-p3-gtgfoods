@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import About from './pages/About';
@@ -18,12 +19,13 @@ import UserProvider from './UserProvider';
 import ShoppingCart from './pages/ShoppingCart';
 import ReceiptPage from './pages/ReceiptPage';
 import PaymentFailPage from './pages/PaymentFailPage';
+import ProductProvider from './ProductProvider';
 
 export default function App() {
   return (
     <Router>
       <UserProvider>
-
+      <ProductProvider>
         {/* NavBar Component here */}
         <Navigation />
 
@@ -34,7 +36,6 @@ export default function App() {
           <Route exact path="/products/:product_id"> 
             <ProductView />
           </Route>
-          {/* <Route exact path="/all-products" component={AllProducts}/> */}
           <Route exact path="/about"> 
             <About /> 
           </Route>
@@ -69,6 +70,7 @@ export default function App() {
             <PaymentFailPage />
           </Route>
         </Switch>
+        </ProductProvider>
       </UserProvider>
     </Router>
   );
