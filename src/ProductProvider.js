@@ -10,7 +10,7 @@ export default function ProductProvider(props) {
         addToCart: async (productId, productName) => {
             let baseURL = config.API_URL + "/shopping-cart/" + productId + "/add";
             try {
-                let result = await axios.get(baseURL, {
+                await axios.get(baseURL, {
                     'headers': {
                         'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
                     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { Container, Card, Button, Alert } from "react-bootstrap";
+import { Container, Card, Button } from "react-bootstrap";
 import axios from 'axios';
 import config from '../config';
 import ProductContext from '../ProductContext';

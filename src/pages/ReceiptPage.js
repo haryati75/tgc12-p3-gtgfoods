@@ -71,7 +71,7 @@ export default function ReceiptPage() {
                                     <Image style={{ width: "12rem"}}src={item.product.image_url} roundedCircle /> 
                                 </Col>
                                 <Col xs={6}>
-                                    {item.product.category.name}: {item.product.name} | Quantity: {item.quantity} | Price: {item.unitPriceStr} | Amount: {item.amountStr}
+                                    {item.product.category.name}: {item.product.name} | Quantity: {item.quantity} | Price: {item.unitSalesPriceStr} | Amount: {item.amountStr}
                                 </Col>
                             </Row>
                         </ListGroup.Item>) : null}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
 import OrderContext from "./OrderContext";
+import axios from 'axios';
 import config from './config';
 
 export default function OrderProvider(props) {
@@ -14,10 +14,12 @@ export default function OrderProvider(props) {
                     'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
                 }
             });
-            setOrders(response.data);
-            console.log("setOrders 1st: ", response.data);
+            setOrders(response.data.orders);
+            console.log("setOrders 1st: ", response.data.orders);
         }
-        fetch();
+        if (localStorage.getItem('userName')) {
+            fetch();
+        }
     }, []);
   
     const orderContext = {

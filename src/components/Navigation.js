@@ -10,8 +10,11 @@ export default function Navigation() {
     const loginJSX = () => {
         if (localStorage.getItem('userName')) {
             return (<React.Fragment>
-                <Nav.Link onClick={()=>history.push('/profile')} active>Hello {localStorage.getItem('userName')}</Nav.Link>
-                <Button className="ms-1"variant="light" onClick={()=>history.push("/cart")} >Shopping Cart</Button> 
+                <Nav>
+                    <Nav.Link onClick={()=>history.push('/profile')} active>Hello {localStorage.getItem('userName')}</Nav.Link>
+                    <Nav.Link onClick={()=>history.push('/orders')} >My Orders</Nav.Link>                    
+                </Nav>
+                <Button className="ms-1"variant="light" onClick={()=>history.push("/cart")} ><i className="fas fa-shopping-cart"></i>Shopping Cart</Button> 
                 <Button className="mx-3" variant="dark" onClick={userContext.logout}>Logout</Button>
             </React.Fragment>)
         } else {
@@ -41,7 +44,7 @@ export default function Navigation() {
                 <Navbar.Collapse id='responsive-navbar-nav'>
                 <Nav className="me-auto">
                     <Nav.Link onClick={()=>history.push('/products')} >Home</Nav.Link>
-                    <Nav.Link onClick={()=>history.push('/orders')} >My Orders</Nav.Link>
+                   
                     <Nav.Link onClick={()=>history.push('/about')} >About</Nav.Link>
                     <Nav.Link onClick={()=>history.push('/contact')} >Contact Us</Nav.Link>
                 </Nav>
