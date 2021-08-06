@@ -93,12 +93,9 @@ export default function UserProfile() {
         event.preventDefault();
         event.stopPropagation();
 
-        console.log("Submit form", formState);
-
         let result = await userContext.saveProfile(formState);
-        console.log(result);
         if (result.status === 200) {
-            history.push('/profile')
+            history.push('/profile');
         }
         if (result && result.status !== 200) {
             if (typeof result === "string") {
@@ -227,7 +224,7 @@ export default function UserProfile() {
                 </Form.Group>
                 </Row>
                 <Button onClick={handleSubmit}>Save Profile</Button>{' '}
-                <Button variant="secondary" href="/profile" >Cancel</Button>
+                <Button variant="secondary" onClick={()=>history.goBack()} >Cancel</Button>
             </Form>
 
         </React.Fragment>)

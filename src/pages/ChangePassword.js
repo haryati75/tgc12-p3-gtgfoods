@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import config from '../config';
 
 export default function ChangePassword() {
+    const history = useHistory();
 
     const [alertJSX, setAlertJSX] = useState();
 
@@ -56,7 +58,7 @@ export default function ChangePassword() {
     return (
         <React.Fragment>
         <Container>
-            <header><h1>Change Password</h1></header>
+            <h1>Change Password</h1>
             { alertJSX ? alertJSX : null }
             <Form>
                 <Form.Group className="mb-3" controlId="oldPassword">
@@ -80,11 +82,9 @@ export default function ChangePassword() {
                         onChange={updateFormField} />
                 </Form.Group>
 
-                <Button variant="primary" 
-                        onClick={submitForm}>
-                    Submit
-                </Button>
-                <Button variant="secondary" href="/profile" >Back to Profile</Button>
+                <Button variant="primary" onClick={submitForm}>Submit</Button>{' '}
+                <Button variant="secondary" onClick={() => history.push('/profile')} >Back to Profile</Button>{' '}
+                <Button variant="dark" onClick={() => history.goBack()}>Go Back</Button>
 
             </Form>
         </Container>

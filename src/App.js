@@ -14,18 +14,21 @@ import UserProfile from './pages/UserProfile';
 import RegisterPage from './pages/RegisterPage';
 import ProfileEdit from './pages/ProfileEdit';
 import ChangePassword from './pages/ChangePassword';
-
-import UserProvider from './UserProvider';
+import AllOrders from './pages/AllOrders';
 import ShoppingCart from './pages/ShoppingCart';
 import ReceiptPage from './pages/ReceiptPage';
 import PaymentFailPage from './pages/PaymentFailPage';
 import ProductProvider from './ProductProvider';
+import UserProvider from './UserProvider';
+import OrderProvider from './OrderProvider';
 
 export default function App() {
   return (
     <Router>
       <UserProvider>
       <ProductProvider>
+      <OrderProvider>
+
         {/* NavBar Component here */}
         <Navigation />
 
@@ -33,8 +36,14 @@ export default function App() {
           <Route exact path="/"> 
             <AllProducts /> 
           </Route>
+          <Route exact path="/products"> 
+            <AllProducts /> 
+          </Route>
           <Route exact path="/products/:product_id"> 
             <ProductView />
+          </Route>
+          <Route exact path="/orders">
+            <AllOrders />
           </Route>
           <Route exact path="/about"> 
             <About /> 
@@ -70,7 +79,9 @@ export default function App() {
             <PaymentFailPage />
           </Route>
         </Switch>
-        </ProductProvider>
+
+      </OrderProvider>
+      </ProductProvider>
       </UserProvider>
     </Router>
   );

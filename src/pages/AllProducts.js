@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Card, Button, Alert } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
@@ -44,8 +44,8 @@ export default function AllProducts() {
                 <h1>All our meals are cooked to order and next-day delivery.</h1>
             </Row>
             <Row>
-                { products.map(p => <Card className="col col-6 col-md-4 col-lg-3 mx-auto" key={p.id}>
-                    
+                { products.map(p => 
+                <Card className="col col-6 col-md-4 col-lg-3 mx-auto" key={p.id}>
                     <Card.Body>
                     <Card.Img className="card-img-top" src={p.image_url} alt={p.name}/>
                         <Card.Title>{p.category.name}: {p.name}</Card.Title>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useHistory } from "react-router-dom";
 import { Alert, Container, Card, Button } from 'react-bootstrap';
 import Moment from 'react-moment';
 import UserContext from '../UserContext';
 
 export default function UserProfile() {
-
+    const history = useHistory();
     const userContext = useContext(UserContext);
 
     const [ profile, setProfile ] = useState({});
@@ -51,9 +52,9 @@ export default function UserProfile() {
                     </ul>   
                 </Card.Body>
             </Card>
-            <Button variant="warning" href="/change-password" >Change Password</Button>{' '}
-            <Button variant="secondary" href="/edit-profile" >Update My Profile</Button>{' '}
-            <Button variant="primary" href="/view-pending-order" >View Pending Order</Button>{' '}
+            <Button variant="warning" onClick={()=>history.push("/change-password")} >Change Password</Button>{' '}
+            <Button variant="secondary" onClick={()=>history.push("/edit-profile")} >Update My Profile</Button>{' '}
+            <Button variant="dark" onClick={() => history.goBack()}>Go Back</Button>
         </React.Fragment>)
     }
 

@@ -1,10 +1,17 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Container, Button } from 'react-bootstrap';
 
 export default function PaymentFailPage() {
+    const history = useHistory();
+
     return (
         <React.Fragment>
-            <h1>Payment has been cancelled. Go to Shopping Cart if you want to retry Checkout.</h1>
-            {/* Redirect to Shopping Cart */}
+            <Container>
+                <h1>Stripe Payment has been cancelled. </h1>
+                <Button variant="secondary" onClick={() => history.push('/profile')} >My Profile</Button>{' '}
+                <Button variant="secondary" onClick={() => history.push('/')} >Continue Shopping</Button>                
+            </Container>
         </React.Fragment>
     )
 }

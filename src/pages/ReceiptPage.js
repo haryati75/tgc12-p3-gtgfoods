@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Card, Container, ListGroup, Alert } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Card, Container, ListGroup, Alert, Image, Button, Row, Col } from 'react-bootstrap';
 import { useLocation } from "react-router-dom";
 import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
+import OrderContext from '../OrderContext';
 
 export default function ReceiptPage() {
     const sessionId = (new URLSearchParams(useLocation().search)).get('sessionId');
+    const history = useHistory();
+
+    const orderContext = useContext(OrderContext);
 
     const [order, setOrder] = useState({});
     const [alertJSX, setAlertJSX] = useState();
@@ -32,6 +37,7 @@ export default function ReceiptPage() {
             });
             console.log("API get order called", response.data.order.orderItems);
             setOrder(response.data.order)
+            orderContext.refreshOrders();
 
         } catch (e) {
             setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
@@ -60,12 +66,21 @@ export default function ReceiptPage() {
                 <Card.Body>
                     <ListGroup variant="flush">
                         {order.orderItems ? order.orderItems.map(item => <ListGroup.Item key={item.id}>
-                            {item.product.category.name}: {item.product.name} | Quantity: {item.quantity} | Price: {item.unitPriceStr} | Amount: {item.amountStr}
+                            <Row>
+                                <Col xs={2}>
+                                    <Image style={{ width: "12rem"}}src={item.product.image_url} roundedCircle /> 
+                                </Col>
+                                <Col xs={6}>
+                                    {item.product.category.name}: {item.product.name} | Quantity: {item.quantity} | Price: {item.unitPriceStr} | Amount: {item.amountStr}
+                                </Col>
+                            </Row>
                         </ListGroup.Item>) : null}
                     </ListGroup>                        
                 </Card.Body>
                 <Card.Footer>
                     <h5>Total Amount: $ {(order.order_amount_total / 100).toFixed(2)}</h5>
+                    <Button variant="secondary" onClick={() => history.push('/profile')} >My Profile</Button>{' '}
+                    <Button variant="secondary" onClick={() => history.push('/')} >Continue Shopping</Button>
                 </Card.Footer>
             </Card>
         </React.Fragment>)
