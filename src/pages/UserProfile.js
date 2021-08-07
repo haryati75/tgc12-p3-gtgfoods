@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Alert, Container, Card, Button } from 'react-bootstrap';
 import Moment from 'react-moment';
 import UserContext from '../UserContext';
@@ -7,6 +7,9 @@ import UserContext from '../UserContext';
 export default function UserProfile() {
     const history = useHistory();
     const userContext = useContext(UserContext);
+
+    const location = useLocation();
+    const savedProfile = location.state && location.state.savedProfile ? true : false;
 
     const [ profile, setProfile ] = useState({});
     const [ customer, setCustomer ] = useState({})
@@ -20,6 +23,9 @@ export default function UserProfile() {
                 if (result.status === 200) {
                     setProfile(result.data.user);
                     setCustomer(result.data)
+                    if (savedProfile) {
+                        setAlertJSX(<Alert variant="success">Profile has been updated successfully.</Alert>)
+                    }
                 } else {
                     setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
                     setProfile(null); 
@@ -54,6 +60,7 @@ export default function UserProfile() {
             </Card>
             <Button variant="warning" onClick={()=>history.push("/change-password")} >Change Password</Button>{' '}
             <Button variant="secondary" onClick={()=>history.push("/edit-profile")} >Update My Profile</Button>{' '}
+            <Button variant="primary" onClick={()=>history.push("/orders")} >View Order History</Button>{' '}
             <Button variant="dark" onClick={() => history.goBack()}>Go Back</Button>
         </React.Fragment>)
     }

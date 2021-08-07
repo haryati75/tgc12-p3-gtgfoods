@@ -20,14 +20,12 @@ import ReceiptPage from './pages/ReceiptPage';
 import PaymentFailPage from './pages/PaymentFailPage';
 import ProductProvider from './ProductProvider';
 import UserProvider from './UserProvider';
-import OrderProvider from './OrderProvider';
 
 export default function App() {
   return (
     <Router>
       <UserProvider>
       <ProductProvider>
-      <OrderProvider>
 
         {/* NavBar Component here */}
         <Navigation />
@@ -80,7 +78,6 @@ export default function App() {
           </Route>
         </Switch>
 
-      </OrderProvider>
       </ProductProvider>
       </UserProvider>
     </Router>

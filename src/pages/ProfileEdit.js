@@ -95,7 +95,9 @@ export default function UserProfile() {
 
         let result = await userContext.saveProfile(formState);
         if (result.status === 200) {
-            history.push('/profile');
+            history.push('/profile', {
+                savedProfile: 'Y'
+            });
         }
         if (result && result.status !== 200) {
             if (typeof result === "string") {

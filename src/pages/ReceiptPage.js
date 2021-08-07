@@ -1,22 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Card, Container, ListGroup, Alert, Image, Button, Row, Col } from 'react-bootstrap';
 import { useLocation } from "react-router-dom";
 import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
-import OrderContext from '../OrderContext';
 
 export default function ReceiptPage() {
     const sessionId = (new URLSearchParams(useLocation().search)).get('sessionId');
     const history = useHistory();
 
-    const orderContext = useContext(OrderContext);
-
     const [order, setOrder] = useState({});
     const [alertJSX, setAlertJSX] = useState();
 
     useEffect(()=> {
+
         const timer = setTimeout(() => {
             console.log("Delaying call to API after Stripe success payment....")
             fetch();
@@ -37,7 +35,6 @@ export default function ReceiptPage() {
             });
             console.log("API get order called", response.data.order.orderItems);
             setOrder(response.data.order)
-            orderContext.refreshOrders();
 
         } catch (e) {
             setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
@@ -48,8 +45,6 @@ export default function ReceiptPage() {
 
     const renderReceipt = () =>  {
         return (<React.Fragment>
-
-            
             <Card.Body>
                 <Card.Subtitle><h3>Your Order is currently being processed</h3></Card.Subtitle>
                 <ul>
@@ -80,7 +75,7 @@ export default function ReceiptPage() {
                 <Card.Footer>
                     <h5>Total Amount: $ {(order.order_amount_total / 100).toFixed(2)}</h5>
                     <Button variant="secondary" onClick={() => history.push('/profile')} >My Profile</Button>{' '}
-                    <Button variant="secondary" onClick={() => history.push('/')} >Continue Shopping</Button>
+                    <Button variant="primary" onClick={() => history.push('/')} >Continue Shopping</Button>
                 </Card.Footer>
             </Card>
         </React.Fragment>)

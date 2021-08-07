@@ -5,7 +5,7 @@ import UserContext from "./UserContext";
 import config from './config';
 
 export default function UserProvider(props) {
-    const history = useHistory()
+    const history = useHistory();
     const [user, setUser] = useState([]);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export default function UserProvider(props) {
             }
             // clear all user data
             localStorage.clear();
-            userContext.setUser(null)
+            userContext.setUser(null);
             history.push('/', {
                 welcomeUser : 'N',
             })

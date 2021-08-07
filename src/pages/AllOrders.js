@@ -1,33 +1,50 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Card, Container, ListGroup, Alert, Image, Button, Row, Col } from 'react-bootstrap';
 import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
 
-import OrderContext from '../OrderContext';
 
 export default function AllOrders() {
 
     const history = useHistory();
-    const orderContext = useContext(OrderContext);
+
     const [orders, setOrders] = useState([]);
+    const [alertJSX, setAlertJSX] = useState();
 
     useEffect(() => {
-        // async function fetch() {
-        //     const response = await axios.get(config.API_URL + "/shopping-cart/orders", {
-        //         'headers': {
-        //             'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
-        //         }
-        //     });
-        //     setOrders(response.data.orders);
-        // }
-        // fetch();
-        console.log("Setup Order Page")
-        setOrders(orderContext.getOrders());
+        const fetch = async () => {
 
-    }, []);
+            try {
+                const fetchedOrders = await fetchOrders();
+                if (fetchedOrders.length === 0) {
+                    setAlertJSX(<Alert variant="warning">You have no previous orders.</Alert>);
+                } else {
+                    setOrders(fetchedOrders);
+                    console.log("Fetched all orders...", fetchedOrders)
+                }                     
+            } catch (e) {
+                setAlertJSX(<Alert variant="danger">Unable to load orders from the server.</Alert>);
+            }
+        }
+        fetch();
+     }, []);
 
+    const fetchOrders = async () => {
+        const response = await axios.get(config.API_URL + "/shopping-cart/orders", {
+            'headers': {
+                'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
+            }
+        });
+        if (response.data.orders) {
+            setOrders(response.data.orders);   
+            return response.data.orders;    
+        } else {
+            setOrders([]);
+            return [];
+        }
+    }
 
     const renderOrdersJSX = () => {
         return (<React.Fragment>
@@ -52,7 +69,7 @@ export default function AllOrders() {
                                         </Col>
                                         <Col>
                                             {item.product.category.name}: {item.product.name} | Quantity: {item.quantity} | Price: {item.unitSalesPriceStr} | Amount: {item.amountStr} {' '}
-                                            {item.product.quantity_in_stock <= 0 && order.order_status !== "Complete" ? <span className="badge bg-warning">Low stock. Delivery within 1 week.</span> : null }
+                                            {item.product.quantity_in_stock <= 0 && !(order.order_status === "Complete" || order.order_status === "Delivering") ? <span className="badge bg-warning">Low stock. Delivery may be delayed.</span> : null }
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>) : null}
@@ -73,8 +90,10 @@ export default function AllOrders() {
             <Row className="my-3">
                 <h1>{localStorage.getItem('userName')}'s Order History</h1>
             </Row>
-            <Button className="mb-3" variant="secondary" onClick={() => history.push('/products')} >Continue Shopping</Button>
-            { orders ? renderOrdersJSX() : <h5>You have no previous orders.</h5> }
+            <Button className="mb-3" variant="secondary" onClick={() => history.push('/products')} >Continue Shopping</Button>{' '}
+            <Button className="mb-3" variant="secondary" onClick={fetchOrders} >Refresh Order Listing</Button>
+            { alertJSX ? alertJSX : null }
+            { orders.length === 0 ? renderOrdersJSX() : <Alert variant="warning">You have no previous orders.</Alert> }
         </Container>
     </React.Fragment>)
 }
