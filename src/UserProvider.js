@@ -123,6 +123,25 @@ export default function UserProvider(props) {
                 }
                 return (error);
             }
+        },
+
+        getResetToken: async (formState) => {
+            try {
+                console.log("getResetToken...before: ", formState)
+                const data = {
+                    ...formState
+                }
+                let result = await axios.post(config.API_URL + "/users/forget_password", data);
+                console.log("getResetToken...after: ", result.data)
+                return ({
+                    'accessToken': result.data.accessToken,
+                    'userName': result.data.userName
+                })
+
+            } catch (error) {
+                console.log("Reset Password get Token failed >> ", error.response.data.error)
+                return (error);        
+            }    
         }
     }
 

@@ -68,8 +68,6 @@ export default function RegisterPage() {
         event.preventDefault();
         event.stopPropagation();
 
-        console.log("DOB", formState.birth_date)
-
         let result = await userContext.register(formState);
         if (result) {
             if (typeof result === "string") {

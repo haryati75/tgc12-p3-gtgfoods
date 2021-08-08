@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 
 export default function SubmittedForm() {
 
@@ -10,9 +11,12 @@ export default function SubmittedForm() {
 
     return (
         <React.Fragment>
-            <h1>Thank you for contacting us</h1> 
-            <p>Your Name: {fullname}</p>
-            <p>Your Email: {email}</p>
+            <Container>
+                <h1>Thank you for contacting us.</h1> 
+                <p>Your Name: {fullname}</p>
+                <p>Your Email: {email}</p>                
+            </Container>
+
         </React.Fragment>
     )
 }

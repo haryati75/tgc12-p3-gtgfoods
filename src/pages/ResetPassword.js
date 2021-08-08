@@ -5,13 +5,16 @@ import axios from 'axios';
 import config from '../config';
 import UserContext from '../UserContext';
 
-export default function ChangePassword() {
+export default function ResetPassword() {
     const history = useHistory();
+    
+    const { accessToken } = useParams();
+    localStorage.setItem('accessToken', accessToken);
+
     const userContext = useContext(UserContext);
     const [alertJSX, setAlertJSX] = useState();
 
     const [ formState, setFormState ] = useState({
-        'oldPassword': '',
         'newPassword': '',
         'confirmPassword': ''
     })
@@ -30,8 +33,8 @@ export default function ChangePassword() {
         async function fetch() {
             try {
                 const result = await userContext.getProfile();
-                // console.log("Change password get profile", result )
-                // setAlertJSX(<Alert variant="success">Your profile has been verified.</Alert>)
+                console.log("Reset password get profile", result )
+                setAlertJSX(<Alert variant="success">Your profile has been verified.</Alert>)
             } catch (err) {
                 console.log("Change Password, getting Profile error", err)
                 setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
@@ -41,27 +44,15 @@ export default function ChangePassword() {
     }, [])
 
     const submitForm = async () => {
-        // Validate inputs before submit
-        if (formState.newPassword === '' || formState.oldPassword === '' || formState.confirmPassword === '') {
-            setAlertJSX(<Alert variant="danger">All fields needs to be filled in.</Alert>)   
-            return;
-        }
-
-        if (formState.newPassword !== formState.confirmPassword) {
-            setAlertJSX(<Alert variant="danger">Confirm Password is not equal to New Password.</Alert>)   
-            return;
-        }
 
         try {
             const options = { 'headers': {'Authorization' : 'Bear ' + localStorage.getItem('accessToken')} };
             const data = {
-                'oldPassword': formState.oldPassword, 
-                'newPassword': formState.newPassword
+                ...formState
             }
-            await axios.put(config.API_URL + "/users/change_password", data, options);
+            await axios.put(config.API_URL + "/users/reset_password", data, options);
             setAlertJSX(<Alert variant="success">Password successfully changed.</Alert>) 
             setFormState({
-                'oldPassword': '',
                 'newPassword': '',
                 'confirmPassword': ''
             })
@@ -77,13 +68,6 @@ export default function ChangePassword() {
             <h1>Change Password</h1>
             { alertJSX ? alertJSX : null }
             <Form>
-                <Form.Group className="mb-3" controlId="oldPassword">
-                    <Form.Label>Current Password</Form.Label>
-                    <Form.Control type="password" placeholder="Enter current password" 
-                        name="oldPassword" value={formState.oldPassword}
-                        onChange={updateFormField} />
-                </Form.Group>
-
                 <Form.Group className="mb-3" controlId="newPassword">
                     <Form.Label>New Password</Form.Label>
                     <Form.Control type="password" placeholder="Enter new Password" 
@@ -99,9 +83,6 @@ export default function ChangePassword() {
                 </Form.Group>
 
                 <Button variant="primary" onClick={submitForm}>Submit</Button>{' '}
-                <Button variant="secondary" onClick={() => history.push('/profile')} >Back to Profile</Button>{' '}
-                <Button variant="dark" onClick={() => history.goBack()}>Go Back</Button>
-
             </Form>
         </Container>
         </React.Fragment>

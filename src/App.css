@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
 
+.card {
+  background-color: #FDFAF6 !important;
+}
+
+body {
+  background-color: #FFF5EB !important;
+}
+
 ul.nav-tabs > li.nav-item > button.active {
   background-color: #344FA1;
   color: white;
@@ -37,10 +45,6 @@ body, p, card-body, li, ul {
 }
 
 header {
-  /* background: url(./components/water-gardens-banner.jpg);
-  background-attachment: fixed;
-  background-position: center bottom;
-  background-size: cover; */
   width: 100%;
   height: 13vh;
   font-family: 'Noto Sans', sans-serif;
