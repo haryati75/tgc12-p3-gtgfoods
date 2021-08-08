@@ -15,6 +15,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfileEdit from './pages/ProfileEdit';
 import ChangePassword from './pages/ChangePassword';
 import ForgetPassword from './pages/ForgetPassword';
+import ResetPassword from './pages/ResetPassword';
 import AllOrders from './pages/AllOrders';
 import ShoppingCart from './pages/ShoppingCart';
 import ReceiptPage from './pages/ReceiptPage';
@@ -70,6 +71,9 @@ export default function App() {
           </Route>
           <Route exact path="/forget-password">
             <ForgetPassword />
+          </Route>
+          <Route exact path="/reset-password/:accessToken">
+            <ResetPassword />
           </Route>
           <Route exact path="/cart">
             <ShoppingCart />

@@ -25,12 +25,11 @@ export default function ForgetPassword() {
     const sendEmail = async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log("Forget Password....", formState.email, e.target)
         try {
 
             // generate access token backend
             let resetResult = await userContext.getResetToken(formState)
-            console.log("result: ", resetResult.accessToken, resetResult);
+            console.log("getResetToken", resetResult);
 
             if (resetResult.accessToken && resetResult.accessToken !== '') {
                 const emailData = {

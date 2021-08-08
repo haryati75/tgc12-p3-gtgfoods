@@ -93,7 +93,7 @@ export default function AllOrders() {
             <Button className="mb-3" variant="secondary" onClick={() => history.push('/products')} >Continue Shopping</Button>{' '}
             <Button className="mb-3" variant="secondary" onClick={fetchOrders} >Refresh Order Listing</Button>
             { alertJSX ? alertJSX : null }
-            { orders.length === 0 ? renderOrdersJSX() : <Alert variant="warning">You have no previous orders.</Alert> }
+            { orders.length !== 0 ? renderOrdersJSX() : <Alert variant="warning">You have no previous orders.</Alert> }
         </Container>
     </React.Fragment>)
 }

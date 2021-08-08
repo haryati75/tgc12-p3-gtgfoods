@@ -7,11 +7,12 @@ import UserContext from '../UserContext';
 export default function LoginPage() {
     const userContext = useContext(UserContext);
     const location = useLocation();
+    const locationEmail = location.state && location.state.email ? location.state.email : null;
     const history = useHistory();
     const loginFail = location.state && location.state.loginFail ? location.state.loginFail : null;
 
     const [formState, setFormState] = useState({
-        'email': "",
+        'email': locationEmail ? locationEmail : '',
         'password': ""
     })
 
@@ -25,6 +26,7 @@ export default function LoginPage() {
     return <div>
         <Container>
             { loginFail ? <Alert variant="danger">Login Failed. Please try again.</Alert> : null }
+            { locationEmail ? <Alert variant="success">Please check your email to reset your password.</Alert> : null }
             <Card>
                 <Card.Header><h1>Login to GreatToGo Foods</h1></Card.Header>
                 <Card.Body>

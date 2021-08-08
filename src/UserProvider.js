@@ -10,7 +10,6 @@ export default function UserProvider(props) {
 
     useEffect(() => {
         setInterval(async () => {
-            console.log("refreshing token...")
             let refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
                 const response = await axios.post(config.API_URL + '/users/refresh', {
@@ -31,10 +30,9 @@ export default function UserProvider(props) {
         logout: async () => {
             let refreshToken = localStorage.getItem('refreshToken');
             try {
-                let response = await axios.post(config.API_URL + "/users/logout", {
+                await axios.post(config.API_URL + "/users/logout", {
                     refreshToken
                 });
-                console.log("logout successful", response);
             } catch(e) {
                 console.log("logout error", e)
             }
@@ -84,10 +82,22 @@ export default function UserProvider(props) {
                 });
                 return response;
             } catch (e) {
-                if (e.response) {
-                    return (e.response)
-                }
-                console.log("API profile error", e)
+                console.log("API getprofile error", e);
+                return (e);
+            }
+        },
+
+        getProfileByToken: async (accessToken) => {
+            try {
+                const response = await axios.get(config.API_URL + "/users/profile_token", {
+                    'headers': {
+                        'Authorization' : 'Bear ' + accessToken
+                    }
+                });
+                return response;
+            } catch (e) {
+                console.log("API getprofile error", e);
+                return (e);
             }
         },
 
@@ -127,12 +137,10 @@ export default function UserProvider(props) {
 
         getResetToken: async (formState) => {
             try {
-                console.log("getResetToken...before: ", formState)
                 const data = {
                     ...formState
                 }
                 let result = await axios.post(config.API_URL + "/users/forget_password", data);
-                console.log("getResetToken...after: ", result.data)
                 return ({
                     'accessToken': result.data.accessToken,
                     'userName': result.data.userName
