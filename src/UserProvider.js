@@ -12,10 +12,14 @@ export default function UserProvider(props) {
         setInterval(async () => {
             let refreshToken = localStorage.getItem('refreshToken');
             if (refreshToken) {
-                const response = await axios.post(config.API_URL + '/users/refresh', {
-                    refreshToken
-                })
-                localStorage.setItem('accessToken', response.data.accessToken);
+                try {
+                    const response = await axios.post(config.API_URL + '/users/refresh', {
+                        refreshToken
+                    })
+                    localStorage.setItem('accessToken', response.data.accessToken);
+                } catch (e) {
+                    localStorage.setItem('sessionExpired', '1');
+                }
             } else {
                 localStorage.clear();
             }
@@ -53,6 +57,7 @@ export default function UserProvider(props) {
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
                 localStorage.setItem('userName', response.data.userName); // to be used by NavBar
+                localStorage.removeItem('sessionExpired');
                 userContext.setUser({
                     'email': email,
                     'userName': response.data.userName,

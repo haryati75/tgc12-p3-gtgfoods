@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import { Container, Col, Card, Button, Alert, Table } from 'react-bootstrap';
 import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
 
 export default function ShoppingCart() {
+    const history = useHistory();
 
     const [cartItems, setCartItems] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
@@ -128,7 +130,7 @@ export default function ShoppingCart() {
                 <Card.Header>
                     <h1>{localStorage.getItem('userName')}'s Shopping Cart</h1>
                     <Col>
-                        <Button variant="primary" href="/" >Continue Shopping</Button>{' '}
+                        <Button variant="primary" onClick={() => history.push('/products')} >Continue Shopping</Button> {' '}
                         { totalQuantity > 0 ? <Button variant="secondary" onClick={clearCart} >Clear Shopping Cart</Button> : null }
                     </Col>
                 </Card.Header>
@@ -189,8 +191,16 @@ export default function ShoppingCart() {
         <React.Fragment>
             <Container>
                 { alertJSX ? alertJSX : null }
-                { totalQuantity > 0 ? renderCartJSX() : <h1>Empty Shopping Cart</h1> }
-                
+                { totalQuantity > 0 ? renderCartJSX() : 
+                    <React.Fragment>
+                        <Card>
+                            <Card.Header><h1>Empty Shopping Cart</h1> </Card.Header>
+                            <Card.Body>
+                                <Button variant="primary" onClick={() => history.push('/products')} >Continue Shopping</Button> 
+                            </Card.Body>                            
+                        </Card>
+                    </React.Fragment>
+                }
             </Container>
         </React.Fragment>
     )

@@ -17,7 +17,7 @@ export default function ProductView() {
 
     // load in the current active post
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetch = async () => {
             try {
                 const response = await axios.get(config.API_URL + "/products/"  + product_id);
                 setProduct(response.data);
@@ -25,7 +25,7 @@ export default function ProductView() {
                 console.log("ProductView err axios", e);
             }
         }
-        fetchProduct()
+        fetch();
     }, [product_id])
 
     const handleAddToCart = async (productId, productName) => {

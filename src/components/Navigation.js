@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Nav, Navbar, Container, Button } from 'react-bootstrap';
+import { Nav, Navbar, Container, Button, Alert } from 'react-bootstrap';
 import UserContext from '../UserContext';
 
 export default function Navigation() {
@@ -55,6 +55,7 @@ export default function Navigation() {
                 </Navbar.Collapse>
             </Container>
         </Navbar>
+        { localStorage.getItem('sessionExpired') === '1' ? <Alert variant="danger">Your session has expired. Please login Again. </Alert> : null }
     </React.Fragment>)
 
 }

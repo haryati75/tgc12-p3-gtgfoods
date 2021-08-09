@@ -45,10 +45,8 @@ export default function ForgetPassword() {
                     }
                 }
                 const options = { 'headers': {'Content-Type' : 'application/json'} };
+                await axios.post('https://api.emailjs.com/api/v1.0/email/send', JSON.stringify(emailData), options);
 
-                let result = await axios.post('https://api.emailjs.com/api/v1.0/email/send', JSON.stringify(emailData), options);
-
-                console.log("emailJS response: ", result);
                 history.push('/login', {
                     ...formState
                 })                
