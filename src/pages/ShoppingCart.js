@@ -36,10 +36,10 @@ export default function ShoppingCart() {
             }
         }
         fetch();
-    }, []);
+    }, [cartItems]);
+
 
     const addQuantity = async (cartItem, quantity) => {
-        console.log("Adding 1 to cart product quantity: ", cartItem.product_id);
         let baseURL = config.API_URL + "/shopping-cart/" + cartItem.product_id + "/quantity/add/" + quantity;
         try {
             let response = await axios.get(baseURL, {
@@ -48,9 +48,7 @@ export default function ShoppingCart() {
                 }
             });
             let updatedCartItem = response.data.cartItem;
-            console.log(updatedCartItem);
             if (updatedCartItem) {
-
                 let wantedCartItem = cartItems.filter(item => item.id === updatedCartItem.id ? item : null)[0];
                 let clonedCartItem = {...wantedCartItem};
                 clonedCartItem.quantity = updatedCartItem.quantity;
@@ -62,9 +60,10 @@ export default function ShoppingCart() {
                     ...cartItems.slice(indexToChange + 1)
                 ]
                 setCartItems(clonedArray);
-                console.log("successfully added quantity to product", clonedArray);
+                setAlertJSX(<Alert variant="success">Successfully updated quantity for {cartItem.product.name}.</Alert>)   
             } else {
-                throw("Error: Quantity not added.")
+                console.log("Error: Quantity not added.");
+                setAlertJSX(<Alert variant="danger">Failed to add/reduce quantity for {cartItem.product.name}.</Alert>)   
             }
         } catch (e) {
             console.log("error adding quantity from cart product: ", e)
@@ -73,7 +72,6 @@ export default function ShoppingCart() {
     }
 
     const removeFromCart = async (cartItem) => {
-        console.log("Removing from shopping cart", cartItem.product_id);
         let baseURL = config.API_URL + "/shopping-cart/" + cartItem.product_id + "/remove";
         try {
             await axios.delete(baseURL, {
@@ -91,7 +89,7 @@ export default function ShoppingCart() {
             setTotalAmount(totalAmount - cartItem.amount);
             setTotalQuantity(totalQuantity - cartItem.quantity);
 
-            setAlertJSX(<Alert variant="success">{cartItem.product.name} removed from Shopping Cart.</Alert>)            
+            setAlertJSX(<Alert variant="success">{cartItem.product.name} successfullly removed from Shopping Cart.</Alert>)            
         } catch (e) {
             console.log("error remove from cart: ", e)
             setAlertJSX(<Alert variant="danger">ERROR: Failed to remove {cartItem.product.name} from Shopping Cart.</Alert>)
@@ -116,7 +114,6 @@ export default function ShoppingCart() {
     }
 
     const checkout = async () => {
-        console.log("React checking out");
         let callingURL = config.API_URL + "/checkout";
         try {
             window.location.replace(callingURL + "?token=" + localStorage.getItem("accessToken") + "&callback=" + config.BASE_URL) 

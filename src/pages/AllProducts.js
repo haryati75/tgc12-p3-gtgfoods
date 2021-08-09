@@ -23,7 +23,6 @@ export default function AllProducts() {
                 let baseURL = config.API_URL + "/products";
                 let response = await axios.get(baseURL);
                 setProducts(response.data)
-                console.log("AllProducts", response.data)
             } catch (e) {
                 setAlertJSX(<Alert variant="danger">ERROR: Failed to load Products from server.</Alert>)
             }
@@ -41,7 +40,7 @@ export default function AllProducts() {
             <Row className="my-3">
                 { alertJSX ? alertJSX : null }
                 { welcomeUser === 'Y' ? <Alert variant="success">Welcome back to our shop, {localStorage.getItem('userName')}</Alert> : null } 
-                <h1>All our meals are cooked to order and next-day delivery.</h1>
+                <Card.Header className="text-center"><h1>Great Asian Foods, ready to go.</h1></Card.Header>
             </Row>
             <Row>
                 { products.map(p => 

@@ -35,7 +35,7 @@ export default function ForgetPassword() {
                 const emailData = {
                     service_id: 'contact_service',
                     template_id: 'forget_pwd',
-                    user_id: 'user_Fvc9zxXoPQStYaW3e3DN0',
+                    user_id: resetResult.emailJSUserId,
                     template_params: {
                         'email': formState.email,
                         'userName': resetResult.userName,

@@ -22,7 +22,6 @@ export default function AllOrders() {
                     setAlertJSX(<Alert variant="warning">You have no previous orders.</Alert>);
                 } else {
                     setOrders(fetchedOrders);
-                    console.log("Fetched all orders...", fetchedOrders)
                 }                     
             } catch (e) {
                 setAlertJSX(<Alert variant="danger">Unable to load orders from the server.</Alert>);

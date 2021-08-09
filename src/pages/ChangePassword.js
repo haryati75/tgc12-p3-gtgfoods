@@ -29,9 +29,7 @@ export default function ChangePassword() {
         // load in the user profile using the access token
         async function fetch() {
             try {
-                const result = await userContext.getProfile();
-                // console.log("Change password get profile", result )
-                // setAlertJSX(<Alert variant="success">Your profile has been verified.</Alert>)
+                await userContext.getProfile();
             } catch (err) {
                 console.log("Change Password, getting Profile error", err)
                 setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)

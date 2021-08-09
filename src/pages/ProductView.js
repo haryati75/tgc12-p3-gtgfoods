@@ -37,17 +37,24 @@ export default function ProductView() {
         <React.Fragment>
             <Container fluid>
                { alertJSX ? alertJSX : null }
-                <Card justify-content-center >
-                    <Card.Header>
+                <Card>
+                    <Card.Header className="text-center">
                         <Card.Title>{product.name}</Card.Title>
                         <Card.Subtitle className="mb-2 ">Price (SGD): ${product.unit_base_price/100}</Card.Subtitle>
                     </Card.Header>
                     <Card.Img variant="top thumbnail" src={product.image_url} style={{ width: '30rem' }}/>
                     <Card.Body>
-                        
-                        <Card.Subtitle className="mb-2 text-muted">{product.brand ? product.brand['name'] : null}</Card.Subtitle>
+
                         <Card.Text>{product.description}</Card.Text>
                         <Card.Text>Ingredients: {product.ingredients}</Card.Text>
+
+                        { product.brand ? 
+                            <Card.Subtitle className="mb-2 text-muted">
+                                <p>By {product.brand['name']} : <img src={product.brand['logo_image_url']} style={{maxWidth:"8rem", maxHeight:"8rem"}} alt={product.brand['name']}/></p>
+                                <p>{product.brand['description']}</p>
+                            </Card.Subtitle>                        
+                        : null}
+
                     </Card.Body>
                     <Card.Footer>
                         { localStorage.getItem('userName') ? 

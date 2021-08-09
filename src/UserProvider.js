@@ -18,7 +18,6 @@ export default function UserProvider(props) {
                 localStorage.setItem('accessToken', response.data.accessToken);
             } else {
                 localStorage.clear();
-                console.log("Session expired");
             }
         }, config.REFRESH_INTERVAL)
     }, []);
@@ -51,7 +50,6 @@ export default function UserProvider(props) {
                     password
                 });
                 // save token and user details
-                console.log("login successful:", response.data)
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
                 localStorage.setItem('userName', response.data.userName); // to be used by NavBar
@@ -143,7 +141,8 @@ export default function UserProvider(props) {
                 let result = await axios.post(config.API_URL + "/users/forget_password", data);
                 return ({
                     'accessToken': result.data.accessToken,
-                    'userName': result.data.userName
+                    'userName': result.data.userName,
+                    'emailJSUserId': result.data.emailJSUserId
                 })
 
             } catch (error) {

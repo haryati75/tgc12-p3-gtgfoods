@@ -32,23 +32,18 @@ export default function ResetPassword() {
         async function fetch() {
             try {
                 const result = await userContext.getProfileByToken(accessToken);
-                console.log("Reset password get profile verified", result.data.name );
                 setUserName(result.data.name);
                 setAlertJSX(<Alert variant="success">Your profile has been verified.</Alert>);
             } catch (err) {
-                console.log("Reset Password, getting Profile error", err);
                 setAlertJSX(<Alert variant="danger">You are not authorised to access this page.</Alert>)
             }
         }
-
         fetch();
-
     }, [])
 
     const submitForm = async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        console.log("submit reset password with token: ", accessToken);
         try {
             const options = { 'headers': {'Authorization' : 'Bear ' + accessToken } };
             const data = {
@@ -67,7 +62,6 @@ export default function ResetPassword() {
             setAlertJSX(<Alert variant="danger">Invalid credentials provided.</Alert>)   
         }
     }
-
 
     return (<React.Fragment>
         <Container>

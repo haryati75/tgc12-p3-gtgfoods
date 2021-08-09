@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
 import emailjs from 'emailjs-com';
+import config from '../config';
 
 export default function Contact() {
     const history = useHistory()
@@ -10,6 +11,7 @@ export default function Contact() {
         'fullname': '',
         'email': '',
         'message': '', 
+        'bcc_to': '',
         'contactRefNo': (Math.random() * 100000 | 0)
     });
     const [ alertJSX, setAlertJSX ] = useState();
@@ -25,9 +27,8 @@ export default function Contact() {
 
     const sendEmail = async (e) => {
         e.preventDefault();
-        console.log("SendEmail", e.target)
         try {
-            await emailjs.sendForm('contact_service', 'contact_form', e.target, 'user_Fvc9zxXoPQStYaW3e3DN0' );
+            await emailjs.sendForm('contact_service', 'contact_form', e.target, config.EMAILJS_ID );
             history.push('/form-submitted', {
                 formState
             })
@@ -60,6 +61,14 @@ export default function Contact() {
                                     placeholder="name@example.com"                                     
                                     name="email"
                                     value={formState.email}
+                                    onChange={updateFormField}/>
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="contactus-email-bcc">
+                                <Form.Label>BCC Email address</Form.Label>
+                                <Form.Control type="email" 
+                                    placeholder="name@example.com"                                     
+                                    name="bcc_to"
+                                    value={formState.bcc_to}
                                     onChange={updateFormField}/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="contactus-message">
