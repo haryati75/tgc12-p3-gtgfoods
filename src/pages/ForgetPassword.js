@@ -29,7 +29,6 @@ export default function ForgetPassword() {
 
             // generate access token backend
             let resetResult = await userContext.getResetToken(formState)
-            console.log("getResetToken", resetResult);
 
             if (resetResult.accessToken && resetResult.accessToken !== '') {
                 const emailData = {

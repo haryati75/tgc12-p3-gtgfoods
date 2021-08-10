@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Container, Form, Row, Col, Button, Alert, Card } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -17,11 +17,8 @@ export default function RegisterPage() {
             day = '' + d.getDate(),
             year = d.getFullYear();
     
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-    
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
         return [year, month, day].join('-');
     }
 
@@ -53,27 +50,23 @@ export default function RegisterPage() {
         )
     }
 
-    useEffect(() => {
-        setFormState({
-            ...formState,
-            'birth_date': formatDate(birthDate)
-        })
-    
-    }, [birthDate]);
-
-    
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         event.stopPropagation();
 
-        let result = await userContext.register(formState);
-        if (result) {
+        let formData = { 
+            ...formState, 
+            'birth_date': formatDate(birthDate)
+        }
+        try {
+            let result = await userContext.register(formData);
             if (typeof result === "string") {
-            setAlertJSX(result);
+                setAlertJSX(result);
             } else {
                 setAlertJSX(Object.values(result))
-            }
+            }        
+        } catch (e) {
+            setAlertJSX('Unable to register customer.')
         }
     }
 

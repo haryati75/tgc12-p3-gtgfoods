@@ -86,7 +86,7 @@ export default function UserProfile() {
 
         }
         fetch();
-    }, [])
+    }, [userContext])
 
     const handleSubmit = async (event) => {
         event.preventDefault();

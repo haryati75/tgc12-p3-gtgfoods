@@ -15,6 +15,25 @@ export default function ReceiptPage() {
 
     useEffect(()=> {
 
+        const fetch = async() => {
+
+            let baseURL = config.API_URL + "/shopping-cart/order/" + sessionId;
+            try {
+                let response = await axios.get(baseURL, {
+                    'headers': {
+                        'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
+                    }
+                });
+                console.log("API get order called", response.data.order.orderItems);
+                setOrder(response.data.order)
+    
+            } catch (e) {
+                setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
+                console.log("Stripe failed access >> ", e)
+            }
+    
+        }
+
         const timer = setTimeout(() => {
             console.log("Delaying call to API after Stripe success payment....")
             fetch();
@@ -22,26 +41,26 @@ export default function ReceiptPage() {
 
         return () => clearTimeout(timer);
        
-    }, []);
+    }, [sessionId]);
 
-    const fetch = async() => {
+    // const fetch = async() => {
 
-        let baseURL = config.API_URL + "/shopping-cart/order/" + sessionId;
-        try {
-            let response = await axios.get(baseURL, {
-                'headers': {
-                    'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
-                }
-            });
-            console.log("API get order called", response.data.order.orderItems);
-            setOrder(response.data.order)
+    //     let baseURL = config.API_URL + "/shopping-cart/order/" + sessionId;
+    //     try {
+    //         let response = await axios.get(baseURL, {
+    //             'headers': {
+    //                 'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
+    //             }
+    //         });
+    //         console.log("API get order called", response.data.order.orderItems);
+    //         setOrder(response.data.order)
 
-        } catch (e) {
-            setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
-            console.log("Stripe failed access >> ", e)
-        }
+    //     } catch (e) {
+    //         setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
+    //         console.log("Stripe failed access >> ", e)
+    //     }
 
-    }
+    // }
 
     const renderReceipt = () =>  {
         return (<React.Fragment>

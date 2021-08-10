@@ -9,7 +9,7 @@ export default function UserProfile() {
     const userContext = useContext(UserContext);
 
     const location = useLocation();
-    const savedProfile = location.state && location.state.savedProfile ? true : false;
+    // const savedProfile = location.state && location.state.savedProfile ? true : false;
 
     const [ profile, setProfile ] = useState({});
     const [ customer, setCustomer ] = useState({})
@@ -23,7 +23,7 @@ export default function UserProfile() {
                 if (result.status === 200) {
                     setProfile(result.data.user);
                     setCustomer(result.data)
-                    if (savedProfile) {
+                    if (location.state && location.state.savedProfile) {
                         setAlertJSX(<Alert variant="success">Profile has been updated successfully.</Alert>)
                     }
                 } else {
@@ -38,7 +38,7 @@ export default function UserProfile() {
             }  
         }
         fetch();
-    }, [])
+    }, [userContext, location.state])
 
     const renderProfile = () => {
         return (<React.Fragment>

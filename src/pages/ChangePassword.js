@@ -36,7 +36,7 @@ export default function ChangePassword() {
             }
         }
         fetch();
-    }, [])
+    }, [userContext])
 
     const submitForm = async () => {
         // Validate inputs before submit

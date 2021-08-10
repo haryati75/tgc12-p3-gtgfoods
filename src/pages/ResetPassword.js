@@ -28,7 +28,6 @@ export default function ResetPassword() {
 
     useEffect( () => {
         // load in the user profile using the access token
-        console.log("Received ResetPassword", accessToken);
         async function fetch() {
             try {
                 const result = await userContext.getProfileByToken(accessToken);
@@ -39,7 +38,7 @@ export default function ResetPassword() {
             }
         }
         fetch();
-    }, [])
+    }, [userContext, accessToken])
 
     const submitForm = async (event) => {
         event.preventDefault();
@@ -55,9 +54,7 @@ export default function ResetPassword() {
                 'new_password': '',
                 'confirm_password': ''
             })
-
             history.push('/login');
-
         } catch (e) {
             setAlertJSX(<Alert variant="danger">Invalid credentials provided.</Alert>)   
         }
