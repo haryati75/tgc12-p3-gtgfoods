@@ -9,7 +9,7 @@ export default function About() {
             <Container>
                 <Card className="text-center">
                     <Card.Header>
-                        <h1>All about GreatToGo Foods</h1>
+                        <h1>All about GreatToGo Foods!</h1>
                     </Card.Header>
                     <Card.Body>
                         <Card.Title>Cooking Healthy meals is hard. Eating Healthy is easy.</Card.Title>
