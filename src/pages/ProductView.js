@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { Container, Card, Button } from "react-bootstrap";
+import { Container, Card, Button, Col, Row } from "react-bootstrap";
 import axios from 'axios';
 import config from '../config';
 import ProductContext from '../ProductContext';
@@ -35,26 +35,32 @@ export default function ProductView() {
 
     return (
         <React.Fragment>
-            <Container fluid>
+            <Container>
                { alertJSX ? alertJSX : null }
-                <Card>
+                <Card style={{ maxWidth:"80rem"}}>
                     <Card.Header className="text-center">
-                        <Card.Title>{product.name}</Card.Title>
+                        <Card.Title><h1>{product.name}</h1></Card.Title>
                         <Card.Subtitle className="mb-2 ">Price (SGD): ${product.unit_base_price/100}</Card.Subtitle>
+                        <Card.Img variant="top thumbnail" src={product.image_url} style={{ width: '30rem' }}/>
                     </Card.Header>
-                    <Card.Img variant="top thumbnail" src={product.image_url} style={{ width: '30rem' }}/>
                     <Card.Body>
-
-                        <Card.Text>{product.description}</Card.Text>
-                        <Card.Text>Ingredients: {product.ingredients}</Card.Text>
-
-                        { product.brand ? 
-                            <Card.Subtitle className="mb-2 text-muted">
-                                <p>By {product.brand['name']} : <img src={product.brand['logo_image_url']} style={{maxWidth:"8rem", maxHeight:"8rem"}} alt={product.brand['name']}/></p>
-                                <p>{product.brand['description']}</p>
-                            </Card.Subtitle>                        
-                        : null}
-
+                        <Row className="text-center">
+                            <Card.Text>{product.description}</Card.Text>
+                        </Row>
+                        <hr></hr>
+                        <Row>
+                            <Col>
+                                <Card.Subtitle>Ingredients: </Card.Subtitle><Card.Text>{product.ingredients}</Card.Text>
+                            </Col>
+                            <Col>
+                                { product.brand ? 
+                                    <Card.Subtitle className="mb-2 text-muted">
+                                        <p>By {product.brand['name']} : <img src={product.brand['logo_image_url']} style={{maxWidth:"8rem", maxHeight:"8rem"}} alt={product.brand['name']}/></p>
+                                        <p>{product.brand['description']}</p>
+                                    </Card.Subtitle>                        
+                                : null}                            
+                            </Col>
+                        </Row>
                     </Card.Body>
                     <Card.Footer>
                         { localStorage.getItem('userName') ? 
