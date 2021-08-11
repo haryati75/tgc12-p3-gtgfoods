@@ -146,6 +146,9 @@ https://perfectsnacks.com/
 https://www.freshly.com/plans-and-menu
 https://www.hicjuice.com/
 
+Global Spinners using React's Context API with Hooks is adapted from:
+https://www.telerik.com/blogs/how-to-use-context-api-with-hooks-efficiently-while-avoiding-performance-bottlenecks
+
 ### Project is sponsored by: 
 Trent Global College, Singapore
 under its Software Development Bootcamp program
