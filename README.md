@@ -2,8 +2,14 @@
 This is the public Front-end web app for the GreatToGo Foods eShop, a home-based business with a small range of products. An education-purpose project on Full-Stack Web Development (Project 3) for TGC Singapore.  Main technologies: NodeJS/Express Framework, React (Hooks method)
 
 Frontend Website: https://greattogo-foods.netlify.app/
+Test accounts for Customer (email/password):
+1. billie.joel@mail.com / rotiprata
+2. marilyn@mail.com / rotiprata
 
 Backend Website: https://hh-tgc12p3-greattogo.herokuapp.com/
+Test accounts for Backend Users:
+1. Administrator: john.doe@mail.com / rotiprata
+2. Business: ali.mat@mail.com / metallica
 
 Backend documentation can be found at Github repo: https://github.com/haryati75/TGC12-P3-GreatToGoFoods-BE
 
@@ -74,6 +80,8 @@ The full-stack framework architecture adopted for this project is depicted as fo
 ![Framework Architecture](./gtg-framework.png)
 
 The development strives to align to the above framework during coding. However, due to the limited duration for the project, more refactoring and design patterns could have been implemented into the codes.
+
+Backend documentation can be found at Github repo: https://github.com/haryati75/TGC12-P3-GreatToGoFoods-BE
 
 ## Dependencies:
 ```
