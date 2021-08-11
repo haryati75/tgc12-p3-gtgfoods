@@ -18,7 +18,7 @@ export default function ReceiptPage() {
     useEffect(()=> {
 
         const fetch = async() => {
-            
+            setGlobalSpinner(true);
             let baseURL = config.API_URL + "/shopping-cart/order/" + sessionId;
             try {
                 let response = await axios.get(baseURL, {
@@ -33,7 +33,7 @@ export default function ReceiptPage() {
                 setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
                 console.log("Stripe failed access >> ", e)
             }
-            
+            setGlobalSpinner(false);
         }
 
         const timer = setTimeout(() => {
@@ -41,9 +41,7 @@ export default function ReceiptPage() {
         }, 1500);
 
         return () => {
-            setGlobalSpinner(true);
             clearTimeout(timer);
-            setGlobalSpinner(false);
         }
        
     }, [sessionId, setGlobalSpinner]);

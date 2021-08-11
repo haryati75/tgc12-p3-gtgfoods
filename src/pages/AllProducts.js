@@ -43,7 +43,7 @@ export default function AllProducts() {
             <Row className="my-3">
                 { alertJSX ? alertJSX : null } 
                 <Card.Header className="text-center">
-                    <h1>Great Asian Foods, ready to go.</h1>
+                    <h1>Great Healthy Foods, ready to go.</h1>
                     <Card.Subtitle>{ welcomeUser === 'Y' ? <>Welcome back to our shop, {localStorage.getItem('userName')}</> : null }</Card.Subtitle>
                     <Card.Subtitle>{ localStorage.getItem('userName') ? <>Delivery will be made the next day.</> : <>To order, please login or register with us.</> }</Card.Subtitle>
                 </Card.Header>

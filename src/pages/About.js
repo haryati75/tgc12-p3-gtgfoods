@@ -14,7 +14,8 @@ export default function About() {
                     <Card.Body>
                         <Card.Title>Cooking Healthy meals is hard. Eating Healthy is easy.</Card.Title>
                         <Card.Text>That is why we have made it our mission to help you eat healthy without the hassle that comes with marketing, cooking and clean up. Eating Healthy and making good choices for your family can be tough, and we are changing that!</Card.Text>
-                        <Card.Text>But there's more, we are doing it the Asian way. Cuisines from Malaysia, Indonesia, Singapore, Thailand and many more will make its way to our Shop.</Card.Text>
+                        <Card.Subtitle>Coming Soon!</Card.Subtitle>
+                        <Card.Text>We are going Healthy, the Asian way. Cuisines with the Healthy twists from Malaysia, Indonesia, Singapore, Thailand and many more will make its way to our Shop.</Card.Text>
                     </Card.Body>
                     <Card.Footer>
                         <Card.Text>What are you waiting for?</Card.Text>
