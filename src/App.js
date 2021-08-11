@@ -9,6 +9,7 @@ import SubmittedForm from './pages/SubmittedForm';
 import ProductView from './pages/ProductView';
 import AllProducts from './pages/AllProducts';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import LoginPage from './pages/LoginPage';
 import UserProfile from './pages/UserProfile';
 import RegisterPage from './pages/RegisterPage';
@@ -22,15 +23,19 @@ import ReceiptPage from './pages/ReceiptPage';
 import PaymentFailPage from './pages/PaymentFailPage';
 import ProductProvider from './ProductProvider';
 import UserProvider from './UserProvider';
+import GlobalSpinner from './components/GlobalSpinner';
+import GlobalSpinnerContextProvider from './GlobalSpinnerContext';
 
 export default function App() {
   return (
     <Router>
       <UserProvider>
       <ProductProvider>
+      <GlobalSpinnerContextProvider>
 
         {/* NavBar Component here */}
         <Navigation />
+        <GlobalSpinner />
 
         <Switch>
           <Route exact path="/"> 
@@ -86,8 +91,12 @@ export default function App() {
           </Route>
         </Switch>
 
+        <Footer />
+
+      </GlobalSpinnerContextProvider>
       </ProductProvider>
       </UserProvider>
     </Router>
+
   );
 }

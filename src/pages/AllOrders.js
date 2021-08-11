@@ -4,18 +4,19 @@ import { Card, Container, ListGroup, Alert, Image, Button, Row, Col } from 'reac
 import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
-
+import { useGlobalSpinnerActionsContext } from '../GlobalSpinnerContext';
 
 export default function AllOrders() {
 
     const history = useHistory();
+    const setGlobalSpinner = useGlobalSpinnerActionsContext();
 
     const [orders, setOrders] = useState([]);
     const [alertJSX, setAlertJSX] = useState();
 
     useEffect(() => {
         const fetch = async () => {
-
+            setGlobalSpinner(true);
             try {
                 const fetchedOrders = await fetchOrders();
                 if (fetchedOrders.length === 0) {
@@ -26,9 +27,10 @@ export default function AllOrders() {
             } catch (e) {
                 setAlertJSX(<Alert variant="danger">Unable to load orders from the server.</Alert>);
             }
+            setGlobalSpinner(false);
         }
         fetch();
-     }, []);
+     }, [setGlobalSpinner]);
 
     const fetchOrders = async () => {
         const response = await axios.get(config.API_URL + "/shopping-cart/orders", {

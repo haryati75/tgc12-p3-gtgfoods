@@ -39,8 +39,8 @@ body, p, card-body, li, ul {
 }
 
 .footer {
-  border-top: solid 2px #6bbbc4;
-  background-color: #DEEDF0;
+  border-top: solid 2px #01937C;
+  background-color: #CEE5D0;
   width: 100%;
 }
 
@@ -86,4 +86,19 @@ header {
 .card-img-top {
   max-height: 50vh;
   max-width: 400px;
+}
+
+.global-spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  font-size: 30px;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

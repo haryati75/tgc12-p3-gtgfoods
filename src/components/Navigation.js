@@ -56,6 +56,6 @@ export default function Navigation() {
             </Container>
         </Navbar>
         { localStorage.getItem('sessionExpired') === '1' ? <Alert variant="danger">Your session has expired. Please login Again. </Alert> : null }
-    </React.Fragment>)
 
+    </React.Fragment>)
 }

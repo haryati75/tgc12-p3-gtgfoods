@@ -5,10 +5,12 @@ import { useLocation } from "react-router-dom";
 import Moment from 'react-moment';
 import axios from 'axios';
 import config from '../config';
+import { useGlobalSpinnerActionsContext } from '../GlobalSpinnerContext';
 
 export default function ReceiptPage() {
     const sessionId = (new URLSearchParams(useLocation().search)).get('sessionId');
     const history = useHistory();
+    const setGlobalSpinner = useGlobalSpinnerActionsContext();
 
     const [order, setOrder] = useState({});
     const [alertJSX, setAlertJSX] = useState();
@@ -16,7 +18,7 @@ export default function ReceiptPage() {
     useEffect(()=> {
 
         const fetch = async() => {
-
+            
             let baseURL = config.API_URL + "/shopping-cart/order/" + sessionId;
             try {
                 let response = await axios.get(baseURL, {
@@ -31,36 +33,20 @@ export default function ReceiptPage() {
                 setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
                 console.log("Stripe failed access >> ", e)
             }
-    
+            
         }
 
         const timer = setTimeout(() => {
-            console.log("Delaying call to API after Stripe success payment....")
             fetch();
-        }, 2000);
+        }, 1500);
 
-        return () => clearTimeout(timer);
+        return () => {
+            setGlobalSpinner(true);
+            clearTimeout(timer);
+            setGlobalSpinner(false);
+        }
        
-    }, [sessionId]);
-
-    // const fetch = async() => {
-
-    //     let baseURL = config.API_URL + "/shopping-cart/order/" + sessionId;
-    //     try {
-    //         let response = await axios.get(baseURL, {
-    //             'headers': {
-    //                 'Authorization' : 'Bear ' + localStorage.getItem('accessToken')
-    //             }
-    //         });
-    //         console.log("API get order called", response.data.order.orderItems);
-    //         setOrder(response.data.order)
-
-    //     } catch (e) {
-    //         setAlertJSX(<Alert variant="danger">Unable to retrieve order information. Please refresh again.</Alert>)     
-    //         console.log("Stripe failed access >> ", e)
-    //     }
-
-    // }
+    }, [sessionId, setGlobalSpinner]);
 
     const renderReceipt = () =>  {
         return (<React.Fragment>
